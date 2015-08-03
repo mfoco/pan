@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+
 namespace pan {
     // recursive case: check using numeric_limits
 

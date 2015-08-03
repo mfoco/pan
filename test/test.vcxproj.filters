@@ -18,9 +18,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="levelorder_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pan\range.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="levelorder_vector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
