@@ -21,12 +21,27 @@
     <ClCompile Include="levelorder_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mink.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imaginary_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pan\range.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="levelorder_vector.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pan\fixed_point.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pan\dual_base.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pan\imaginary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

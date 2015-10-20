@@ -52,9 +52,28 @@ namespace pan {
         //template <int64_t MIN, typename... Ts>
         //struct best_fitting_integral_t<MIN, unspecified_range, Ts...> : bounded_signed_t<MIN, 0, Ts...>
         //{};
-    }
+
+		template <int BITS, typename... > struct unsigned_integer_t;
+
+		template <int BITS, typename T, typename... Ts> struct unsigned_integer_t<BITS, T, Ts...> : std::conditional_t<(!std::numeric_limits<T>::is_signed && BITS <= std::numeric_limits<T>::digits()),
+			tag<T>,
+			unsigned_integer_t<BITS, Ts... >>
+		{ };
+
+		template <int BITS, typename... > struct signed_integer_t;
+
+		template <int BITS, typename T, typename... Ts> struct signed_integer_t<BITS, T, Ts...> : std::conditional_t<(!std::numeric_limits<T>::is_signed && BITS <= std::numeric_limits<T>::digits()),
+			tag<T>,
+			signed_integer_t<BITS, Ts... >>
+		{ };
+	}
 
     template <int64_t MIN, uint64_t MAX>
     using best_fitting_integral = typename best_fitting_integral_t<MIN, MAX, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, uint64_t, int64_t>::type;
 
+	template <int BITS>
+	using unsigned_integer = typename unsigned_integer_t<BITS, uint8_t, uint16_t, uint32_t, uint64_t>::type;
+
+	template <int BITS>
+	using signed_integer = typename signed_integer_t<BITS, int8_t, int16_t, int32_t, int64_t>::type;
 }
