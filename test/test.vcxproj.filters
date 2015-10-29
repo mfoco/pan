@@ -27,6 +27,12 @@
     <ClCompile Include="imaginary_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="imaginary_real_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imaginary_complex_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pan\range.hpp">

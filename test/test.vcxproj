@@ -145,6 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="imaginary_complex_test.cpp" />
+    <ClCompile Include="imaginary_real_test.cpp" />
     <ClCompile Include="imaginary_test.cpp" />
     <ClCompile Include="levelorder_test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
