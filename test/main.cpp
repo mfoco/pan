@@ -1,4 +1,11 @@
 
+#include <gtest/gtest.h>
+
+GTEST_API_ int main(int argc, char **argv) {
+	testing::InitGoogleTest(&argc, argv);
+	return RUN_ALL_TESTS();
+}
+
 #include <pan/range.hpp>
 
 pan::best_fitting_integral<0, 10> uc1;
@@ -26,7 +33,7 @@ pan::best_fitting_integral<-1, std::numeric_limits<int64_t>::max()> sll2;
 
 using namespace std;
 
-int main()
+void mainagioia()
 {
     cout << typeid(uc1).name() << endl;
     cout << typeid(uc2).name() << endl;

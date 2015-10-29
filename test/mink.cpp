@@ -142,7 +142,7 @@ template <int V, int N> using repeat_t = typename repeat<V, N>::type;
 
 #include <iostream>
 
-int main()
+void maiunagioja()
 {
 	using q = make_static_list_t<>;
 	using q1 = make_static_list_t<1>;

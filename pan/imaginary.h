@@ -2,7 +2,6 @@
 
 
 #include <functional>
-#include <cassert>
 #include <complex>
 
 template <typename T, typename U> using sum_result_t = decltype(*static_cast<T*>(nullptr) + *static_cast<U*>(nullptr));
@@ -22,42 +21,57 @@ public:
 	constexpr imaginary(const imaginary<T> &other) : value_(other.value_) {}
 	template <typename U> constexpr imaginary(const imaginary<U> &other) : value_(other.value_) {}
 	constexpr imaginary(imaginary<T> &&other) : value_(std::move(other.value_)) {}
+
 	template <typename U> constexpr std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> &operator = (const imaginary<U> &other) noexcept(noexcept(value_ = other.value_))
 	{
 		value_ = other.value_;
 		return *this;
 	}
 
-	constexpr imaginary<T> &operator = (imaginary<T> &&other) & noexcept(noexcept(std::swap(value_, other.value_)))
+	imaginary<T> &operator = (const imaginary<T> &other) noexcept(noexcept(value_ = other.value_))
+	{
+		value_ = other.value_;
+		return *this;
+	}
+
+	// TODO: Verify: does this make any sense at all?
+	imaginary<T> &operator = (imaginary<T> &&other) && = delete;
+
+	// TODO: MS BUG? constexpr makes the operator const, creating confusion with copy constructor (wat?)
+	/*constexpr*/ imaginary<T> &operator = (imaginary<T> &&other) & noexcept(noexcept(std::swap(value_, other.value_)))
 	{
 		std::swap(value_, other.value_);
 		return *this;
 	}
 
-	constexpr operator std::complex<T>()
+	constexpr operator std::complex<T>() const
 	{
 		return{ 0, value_ };
 	}
 
-	template <typename U> constexpr std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> &operator += (const imaginary<U> &other) & noexcept(noexcept(value_ += other.value()))
+	// TODO: MS BUG? constexpr makes the operator const.
+	template <typename U> /*constexpr*/ std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> &operator += (const imaginary<U> &other) & noexcept(noexcept(value_ += other.value()))
 	{
 		value_ += other.value();
 		return *this;
 	}
 
-	template <typename U> constexpr std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> &operator -= (const imaginary<U> &other) & noexcept(noexcept(value_ += other.value()))
+	// TODO: MS BUG? constexpr makes the operator const.
+	template <typename U> /*constexpr*/ std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> &operator -= (const imaginary<U> &other) & noexcept(noexcept(value_ += other.value()))
 	{
 		value_ -= other.value();
 		return *this;
 	}
 
-	template <typename U> constexpr std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> &operator *= (const U &other) & noexcept(noexcept(value_ *= other))
+	// TODO: MS BUG? constexpr makes the operator const.
+	template <typename U> /*constexpr*/ std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> &operator *= (const U &other) & noexcept(noexcept(value_ *= other))
 	{
 		value_ *= other;
 		return *this;
 	}
 
-	template <typename U> constexpr std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> operator /= (const U &other) & noexcept(noexcept(value_ /= other))
+	// TODO: MS BUG? constexpr makes the operator const.
+	template <typename U> /*constexpr*/ std::enable_if_t<std::is_assignable<T&, U>::value, imaginary<T>> operator /= (const U &other) & noexcept(noexcept(value_ /= other))
 	{
 		value_ /= other;
 		return *this;
@@ -81,22 +95,6 @@ public:
 		return imaginary<T>(-value_);
 	}
 
-	//template <typename U> constexpr auto operator * (const imaginary<U> &other) const -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, decltype(-value_*other.value_)> {
-	//	return -value_*other.value_;
-	//}
-
-	//template <typename U> constexpr auto operator * (const U &other) const -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, imaginary<decltype(value_*other)>> {
-	//	return imaginary<decltype(value_*other)>(value_*other);
-	//}
-
-	//template <typename U> constexpr auto operator / (const imaginary<U> &other) const ->std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, decltype(value_ / other.value_)> {
-	//	return value_ / other.value_;
-	//}
-
-	//template <typename U> constexpr auto operator / (const U &other) const ->std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, imaginary<decltype(value_/other)>> {
-	//	return imaginary<decltype(value_/other)>(value_/other);
-	//}
-	//
 	static constexpr imaginary<T> zero() { return imaginary<T>{}; }
 };
 
@@ -155,19 +153,20 @@ template <typename T, typename U> constexpr auto operator + (const imaginary<T> 
 }
 
 template <typename T, typename U> constexpr auto operator + (const T &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<sum_result_t<T, U>>> {
-	return{ a, b.value() };
+	return std::complex<sum_result_t<T, U>>(a, b.value());
+	//return{ a, b.value() };
 }
 
 template <typename T, typename U> constexpr auto operator + (const imaginary<T> &a, const U &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<sum_result_t<T, U>>> {
-	return{ b, a.value() };
+	return std::complex<sum_result_t<T, U>>(b, a.value());
 }
 
 template <typename T, typename U> constexpr auto operator + (const std::complex<T> &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<sum_result_t<T, U>>> {
-	return{ a.real(), a.imag() + b.value() };
+	return std::complex<sum_result_t<T, U>>(a.real(), a.imag() + b.value());
 }
 
 template <typename T, typename U> constexpr auto operator + (const imaginary<T> &a, const std::complex<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<sum_result_t<T, U>>> {
-	return{ b.real(), a.value() + b.imag() };
+	return std::complex<sum_result_t<T, U>>(b.real(), a.value() + b.imag());
 }
 
 template <typename T, typename U> constexpr auto operator - (const imaginary<T> &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, imaginary<sub_result_t<T, U>>> {
@@ -175,19 +174,19 @@ template <typename T, typename U> constexpr auto operator - (const imaginary<T> 
 }
 
 template <typename T, typename U> constexpr auto operator - (const T &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<sub_result_t<T, U>>> {
-	return{ a, -b.value() };
+	return std::complex<sub_result_t<T, U>>(a, -b.value());
 }
 
 template <typename T, typename U> constexpr auto operator - (const imaginary<T> &a, const U &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<sub_result_t<T, U>>> {
-	return{ -b, a.value() };
+	return std::complex<sub_result_t<T, U>>(-b, a.value());
 }
 
 template <typename T, typename U> constexpr auto operator - (const std::complex<T> &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<sub_result_t<T, U>>> {
-	return{ a.real(), a.imag() - b.value() };
+	return std::complex<sub_result_t<T, U>>(a.real(), a.imag() - b.value());
 }
 
 template <typename T, typename U> constexpr auto operator - (const imaginary<T> &a, const std::complex<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<sub_result_t<T, U>>> {
-	return{ -b.real(), a.value() - b.imag() };
+	return std::complex<sub_result_t<T, U>>(-b.real(), a.value() - b.imag());
 }
 
 template <typename T, typename U> constexpr auto operator * (const imaginary<T> &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, mul_result_t<T, U>> {
@@ -203,11 +202,11 @@ template <typename T, typename U> constexpr auto operator * (const imaginary<T> 
 }
 
 template <typename T, typename U> constexpr auto operator * (const std::complex<T> &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<mul_result_t<T, U>>> {
-	return{ -a.imag()*b.value(), a.real()*b.value() };
+	return std::complex<mul_result_t<T, U>>(-a.imag()*b.value(), a.real()*b.value());
 }
 
 template <typename T, typename U> constexpr auto operator * (const imaginary<T> &a, const std::complex<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<mul_result_t<T, U>>> {
-	return{ -a.value()*b.imag(), a.value()*b.real() };
+	return std::complex<mul_result_t<T, U>>(-a.value()*b.imag(), a.value()*b.real());
 }
 
 template <typename T, typename U> constexpr auto operator / (const imaginary<T> &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, div_result_t<T, U>> {
@@ -223,11 +222,11 @@ template <typename T, typename U> constexpr auto operator / (const imaginary<T> 
 }
 
 template <typename T, typename U> constexpr auto operator / (const std::complex<T> &a, const imaginary<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<div_result_t<T, U>>> {
-	return{ a.imag() / b.value(), -a.real() / b.value() };
+	return std::complex<div_result_t<T, U>>(a.imag() / b.value(), -a.real() / b.value());
 }
 
 template <typename T, typename U> constexpr auto operator / (const imaginary<T> &a, const std::complex<U> &b) -> std::enable_if_t<std::is_assignable<T&, U>::value || std::is_assignable<U&, T>::value, std::complex<div_result_t<T, U>>> {
-	return{ a.value()*b.imag() / (b.real()*b.real() + b.imag()*b.imag()), a.value()*b.real() / (b.real()*b.real() + b.imag()*b.imag()) };
+	return  std::complex<div_result_t<T, U>>(a.value()*b.imag() / (b.real()*b.real() + b.imag()*b.imag()), a.value()*b.real() / (b.real()*b.real() + b.imag()*b.imag()));
 }
 
 constexpr imaginary<float> operator ""_fi(long double f)
