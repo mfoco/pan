@@ -2,11 +2,11 @@
 #include <type_traits>
 #include <iostream>
 
-template<bool B> using type_selector = std::conditional_t<B, int, unsigned int>;
+template<bool B> struct type_selector { typedef typename std::conditional<B, int, unsigned int>::type type; };
 
-template<bool B> constexpr auto min_value(type_selector<B> value)
+template<bool B> typename type_selector<B>::type min_value(typename type_selector<B>::type value)
 {
-	return B ? -(type_selector<B>(1) << 31) : 0;
+	return B ? -(typename type_selector<B>::type(1) << 31) : 0;
 }
 
 int main()
