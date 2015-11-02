@@ -2,6 +2,8 @@
 #include <pan/imaginary.h>
 #include <gtest/gtest.h>
 
+using namespace pan;
+
 TEST(ImaginaryComplex, Comparison)
 {
 	auto xdImaginary1 = 0.0_i;

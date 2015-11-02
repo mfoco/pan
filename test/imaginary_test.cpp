@@ -2,6 +2,8 @@
 #include <pan/imaginary.h>
 #include <gtest/gtest.h>
 
+using namespace pan;
+
 TEST(Imaginary, DefaultConstruction)
 {
 	imaginary<float> xf;

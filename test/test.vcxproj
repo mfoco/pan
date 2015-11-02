@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\pan\integer_test.cpp" />
     <ClCompile Include="imaginary_complex_test.cpp" />
     <ClCompile Include="imaginary_real_test.cpp" />
     <ClCompile Include="imaginary_test.cpp" />
@@ -156,12 +157,15 @@
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mink.cpp" />
+    <ClCompile Include="ms_unsigned_minus_error_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pan\dual_base.hpp" />
     <ClInclude Include="..\pan\fixed_point.hpp" />
     <ClInclude Include="..\pan\imaginary.h" />
+    <ClInclude Include="..\pan\integer.h" />
     <ClInclude Include="..\pan\range.hpp" />
+    <ClInclude Include="..\pan\tag.h" />
     <ClInclude Include="levelorder_vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,6 +2,8 @@
 #include <pan/imaginary.h>
 #include <gtest/gtest.h>
 
+using namespace pan;
+
 TEST(ImaginaryReal, Comparison)
 {
 	auto xdImaginary1 = 50.0_i;
