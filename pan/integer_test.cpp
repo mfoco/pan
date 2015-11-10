@@ -27,19 +27,29 @@ TEST(Integer, DefaultConstruction)
 
 TEST(Integer, Construction)
 {
-	integer<false, 10> u10_10{10};
-	integer<true, 10> s10_10{10};
-	//FAIL();
+	integer<false, 10> u10_10s{ 10 };
+	integer<true, 10> s10_10s{ 10 };
+	integer<false, 10> u10_10u{ 10u };
+	integer<true, 10> s10_10u{ 10u };
+	integer<false, 1> s10_10u_fail{ 10241u }; // SHOULD NOT COMPILE!!!
+
+
+	ASSERT_EQ(u10_10s.value(), u10_10u.value());
+	ASSERT_EQ(s10_10s.value(), s10_10u.value());
 }
 
 TEST(Integer, CopyConstruction)
 {
-	FAIL();
+	integer<false, 10> u10_10s1{ 10 };
+	auto u10_10s2 = u10_10s1; // FAILS on VS2015 Upd1 (constructor is deleted)
+	ASSERT_EQ(u10_10s1.value(), u10_10s2.value());
 }
 
 TEST(Integer, MoveConstruction)
 {
-	FAIL();
+    integer<false, 10> u10_10s1{ 10 };
+    integer<false, 10> u10_10s2(std::move(u10_10s1));
+    ASSERT_EQ(u10_10s1.value(), 10);
 }
 
 TEST(Integer, CopyAssignment)

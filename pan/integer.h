@@ -2,10 +2,15 @@
 
 #include <cstdint>
 #include <algorithm>
+#include <type_traits>
 #include "tag.h"
 
 namespace pan
 {
+	template <typename T> constexpr void is_constexpr_impl(T&& x) throw(...) { }
+	#define IS_CONSTEXPR(EXPR) (noexcept(::pan::is_constexpr_impl(EXPR)))
+
+
 	template <bool SIGNED, int BITS, typename... > struct select_integer_from_list;
 
 	template <bool SIGNED, int BITS, typename T, typename... Ts> struct select_integer_from_list<SIGNED, BITS, T, Ts...> : std::conditional_t<((SIGNED == std::numeric_limits<T>::is_signed) && (BITS <= std::numeric_limits<T>::digits)),
@@ -25,34 +30,42 @@ namespace pan
 		underlying_type _value;
 	public:
 
-		constexpr static underlying_type min_value() {
+		constexpr static underlying_type min_value() noexcept {
 			return SIGNED ? (-(static_cast<underlying_type>(1) << BITS)) : 0;
 		}
 
-		constexpr static underlying_type max_value() {
+		constexpr static underlying_type max_value() noexcept {
 			return (static_cast<underlying_type>(1) << BITS) - 1;
 		}
 
 		// default constructor
-		integer() : _value() {}
+		constexpr integer() noexcept : _value() {}
 
 		// constructor
 		template<typename U> 
-		constexpr integer(U value, std::enable_if_t<std::numeric_limits<U>::is_integer && (((SIGNED == std::numeric_limits<U>::is_signed) && (BITS <= std::numeric_limits<U>::digits)) || (SIGNED && !std::numeric_limits<U>::is_signed && (BITS < std::numeric_limits<U>::digits)))>* = nullptr) : _value(value)
+		constexpr integer(U value, std::enable_if_t<std::numeric_limits<U>::is_integer && (((SIGNED == std::numeric_limits<U>::is_signed) && (BITS <= std::numeric_limits<U>::digits)) || (SIGNED && !std::numeric_limits<U>::is_signed && (BITS < std::numeric_limits<U>::digits)))>* = nullptr) noexcept : _value(value)
 		{
 		}
 
 		// value-checking constexpr constructor
 		template<typename U>
-		constexpr integer(U value, std::enable_if_t<std::numeric_limits<U>::is_integer && !(((SIGNED == std::numeric_limits<U>::is_signed) && (BITS <= std::numeric_limits<U>::digits)) || (SIGNED && !std::numeric_limits<U>::is_signed && (BITS < std::numeric_limits<U>::digits)))>* = nullptr) : _value(value)
+		constexpr integer(U value, std::enable_if_t<std::numeric_limits<U>::is_integer && !(((SIGNED == std::numeric_limits<U>::is_signed) && (BITS <= std::numeric_limits<U>::digits)) || (SIGNED && !std::numeric_limits<U>::is_signed && (BITS < std::numeric_limits<U>::digits)))>* = nullptr) noexcept : _value(value)
 		{
-			static_assert(value >= min_value() && value <= max_value(), "Value doesn't fit."); // UB! signed/unsigned comparison. TODO: Find a better way to check
+            if (noexcept(constexpr auto i = value)) {
+                static_assert(!IS_CONSTEXPR(value) || (value >= min_value() && value <= max_value()), "Value doesn't fit."); // UB! signed/unsigned comparison. TODO: Find a better way to check
+            }
 		}
 
 		// upcast & copy constructor
 		template<bool FROM_SIGNED, int FROM_BITS, typename = std::enable_if_t<((SIGNED == FROM_SIGNED) && (BITS <= FROM_BITS) || (SIGNED && (BITS < FROM_BITS)))>>
-		constexpr integer(const integer<FROM_SIGNED, FROM_BITS> &other) : _value(other.value)
+		constexpr integer(const integer<FROM_SIGNED, FROM_BITS> &other) noexcept : _value(other.value)
 		{
+		}
+
+		// move constructor
+		constexpr integer(this_type &&other) noexcept
+		{
+            std::swap(_value, other._value);
 		}
 
 		template<bool FROM_SIGNED, int FROM_BITS, typename = std::enable_if_t<((SIGNED == FROM_SIGNED) && (BITS <= FROM_BITS) || (SIGNED && (BITS < FROM_BITS)))>>

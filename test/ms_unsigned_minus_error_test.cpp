@@ -4,9 +4,9 @@
 
 template<bool B> struct type_selector { typedef typename std::conditional<B, int, unsigned int>::type type; };
 
-template<bool B> typename type_selector<B>::type min_value(typename type_selector<B>::type value)
+template<bool B> constexpr typename type_selector<B>::type min_value(typename type_selector<B>::type value)
 {
-	return B ? -(typename type_selector<B>::type(1) << 31) : 0;
+	return (!B)?0:-(typename type_selector<B>::type(1) << 31);
 }
 
 int main()
