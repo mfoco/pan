@@ -34,8 +34,14 @@ namespace pan
         // default constructor
         constexpr integer() noexcept : _value() {}
 
-        template<typename U> class has_smaller_range { enum { value = ((digits <= std::numeric_limits<U>::digits) && (sign || !std::numeric_limits<U>::is_signed)) }; };
-
+        template<typename U> class has_smaller_range {
+            enum {
+                value = (
+                (sign == std::numeric_limits<U>::is_signed) && (digits <= std::numeric_limits<U>::digits)) ||
+                (sign && (digits < std::numeric_limits<U>::digits))
+            };
+        };
+           
         // value-checking constexpr constructor
         template<typename U>
         constexpr integer(U value, std::enable_if_t < std::numeric_limits<U>::is_integer && !has_smaller_range<U>::value>* = nullptr) : _value(value)
@@ -49,14 +55,13 @@ namespace pan
         {
         }
 
-        template<bool FROM_SIGNED, int FROM_BITS, typename = std::enable_if_t<((SIGNED == FROM_SIGNED) && (BITS <= FROM_BITS) || (SIGNED && (BITS < FROM_BITS)))>>
-        constexpr integer(const this_type &other) noexcept : _value(other.value)
+        constexpr integer(const this_type &other) noexcept : _value(other._value)
         {
         }
 
         // upcast - no need for overflow checks
-        template<bool FROM_SIGNED, int FROM_BITS, typename = std::enable_if_t<((SIGNED == FROM_SIGNED) && (BITS <= FROM_BITS) || (SIGNED && (BITS < FROM_BITS)))>>
-        constexpr integer(const integer<FROM_SIGNED, FROM_BITS> &other) noexcept : _value(other._value)
+        template<bool FROM_SIGNED, int FROM_BITS, typename = std::enable_if_t<((SIGNED == FROM_SIGNED || SIGNED) && (FROM_BITS <= BITS))>>
+        constexpr integer(const integer<FROM_SIGNED, FROM_BITS> &other) noexcept : _value(other.value())
         {
         }
 
@@ -67,12 +72,28 @@ namespace pan
             swap(_value, other._value);
         }
 
-        template<bool FROM_SIGNED, int FROM_BITS, typename = std::enable_if_t<((SIGNED == FROM_SIGNED) && (BITS <= FROM_BITS) || (SIGNED && (BITS < FROM_BITS)))>>
-        /*constexpr*/ this_type & operator = (const integer<FROM_SIGNED, FROM_BITS> &other)
+        /*constexpr*/ this_type & operator = (const this_type &other)
         {
-            value = other.value;
+            _value = other._value;
             return *this;
         }
+
+        /*constexpr*/ this_type & operator = (this_type &&other)
+        {
+            using std::move;
+            _value = move(other._value);
+            return *this;
+        }
+
+        template<bool FROM_SIGNED, int FROM_BITS, typename = std::enable_if_t<((SIGNED == FROM_SIGNED) && (FROM_BITS <= BITS) || (SIGNED && (FROM_BITS < BITS)))>>
+        /*constexpr*/ this_type & operator = (const integer<FROM_SIGNED, FROM_BITS> &other)
+        {
+            _value = other.value();
+            return *this;
+        }
+
+        constexpr const this_type & operator +() const & { return *this; }
+        constexpr this_type operator +() const && { return *this; }
 
         constexpr underlying_type value() const { return _value; }
     };
@@ -81,6 +102,13 @@ namespace pan
     constexpr auto operator + (const integer<SIGNED, A_BITS> &a, const integer<SIGNED, B_BITS> &b)
     {
         using result_type = integer<SIGNED, std::max(A_BITS, B_BITS) + 1>;
+        return result_type{ static_cast<typename result_type::underlying_type>(a) + static_cast<typename result_type::underlying_type>(b) };
+    }
+
+    template<bool SIGNED, int A_BITS, int B_BITS>
+    constexpr auto operator * (const integer<SIGNED, A_BITS> &a, const integer<SIGNED, B_BITS> &b)
+    {
+        using result_type = integer<SIGNED, A_BITS + B_BITS>;
         return result_type{ static_cast<typename result_type::underlying_type>(a) + static_cast<typename result_type::underlying_type>(b) };
     }
 }
