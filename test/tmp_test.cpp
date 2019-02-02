@@ -103,7 +103,7 @@ template <int V, int N> struct repeat
 
 template <int V> struct repeat<V, 0>
 {
-	using type = static_list<V>;
+	using type = make_static_list_t<>;
 };
 
 template <int V, int N> using repeat_t = typename repeat<V, N>::type;

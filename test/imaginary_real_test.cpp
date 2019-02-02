@@ -10,7 +10,13 @@ TEST(ImaginaryReal, Comparison)
 	auto xdImaginary2 = 0.0_i;
 	auto xdReal1 = 50.0;
 	auto xdReal2 = 0.0;
-	imaginary<int> xiImaginary1{ 50 };
+
+    auto xfImaginary1 = 50.0_fi;
+    auto xfImaginary2 = 0.0_fi;
+    auto xfReal1 = 50.0f;
+    auto xfReal2 = 0.0f;
+
+    imaginary<int> xiImaginary1{ 50 };
 	imaginary<int> xiImaginary2{ 0 };
 	auto xiReal1 = 50;
 	auto xiReal2 = 0;
@@ -34,6 +40,42 @@ TEST(ImaginaryReal, Comparison)
 	EXPECT_FALSE(xdImaginary2 != xdReal2);
 	EXPECT_FALSE(xdReal2 != xdImaginary2);
 
+    EXPECT_FALSE(xfImaginary1 == xfReal1);
+    EXPECT_FALSE(xfReal1 == xfImaginary1);
+    EXPECT_FALSE(xfImaginary1 == xfReal2);
+    EXPECT_FALSE(xfReal1 == xfImaginary2);
+    EXPECT_FALSE(xfImaginary2 == xfReal1);
+    EXPECT_FALSE(xfReal2 == xfImaginary1);
+    EXPECT_TRUE(xfImaginary2 == xfReal2);
+    EXPECT_TRUE(xfReal2 == xfImaginary2);
+
+    EXPECT_TRUE(xfImaginary1 != xfReal1);
+    EXPECT_TRUE(xfReal1 != xfImaginary1);
+    EXPECT_TRUE(xfImaginary1 != xfReal2);
+    EXPECT_TRUE(xfReal1 != xfImaginary2);
+    EXPECT_TRUE(xfImaginary2 != xfReal1);
+    EXPECT_TRUE(xfReal2 != xfImaginary1);
+    EXPECT_FALSE(xfImaginary2 != xfReal2);
+    EXPECT_FALSE(xfReal2 != xfImaginary2);
+
+    EXPECT_FALSE(xiImaginary1 == xiReal1);
+    EXPECT_FALSE(xiReal1 == xiImaginary1);
+    EXPECT_FALSE(xiImaginary1 == xiReal2);
+    EXPECT_FALSE(xiReal1 == xiImaginary2);
+    EXPECT_FALSE(xiImaginary2 == xiReal1);
+    EXPECT_FALSE(xiReal2 == xiImaginary1);
+    EXPECT_TRUE(xiImaginary2 == xiReal2);
+    EXPECT_TRUE(xiReal2 == xiImaginary2);
+
+    EXPECT_TRUE(xiImaginary1 != xiReal1);
+    EXPECT_TRUE(xiReal1 != xiImaginary1);
+    EXPECT_TRUE(xiImaginary1 != xiReal2);
+    EXPECT_TRUE(xiReal1 != xiImaginary2);
+    EXPECT_TRUE(xiImaginary2 != xiReal1);
+    EXPECT_TRUE(xiReal2 != xiImaginary1);
+    EXPECT_FALSE(xiImaginary2 != xiReal2);
+    EXPECT_FALSE(xiReal2 != xiImaginary2);
+    
 	// mixing types
 	EXPECT_FALSE(xdImaginary1 == xiReal1);
 	EXPECT_FALSE(xdReal1 == xiImaginary1);
@@ -43,6 +85,7 @@ TEST(ImaginaryReal, Comparison)
 	EXPECT_FALSE(xdReal2 == xiImaginary1);
 	EXPECT_TRUE(xdImaginary2 == xiReal2);
 	EXPECT_TRUE(xdReal2 == xiImaginary2);
+
 	EXPECT_FALSE(xiImaginary1 == xdReal1);
 	EXPECT_FALSE(xiReal1 == xdImaginary1);
 	EXPECT_FALSE(xiImaginary1 == xdReal2);
@@ -60,6 +103,7 @@ TEST(ImaginaryReal, Comparison)
 	EXPECT_TRUE(xdReal2 != xiImaginary1);
 	EXPECT_FALSE(xdImaginary2 != xiReal2);
 	EXPECT_FALSE(xdReal2 != xiImaginary2);
+
 	EXPECT_TRUE(xiImaginary1 != xdReal1);
 	EXPECT_TRUE(xiReal1 != xdImaginary1);
 	EXPECT_TRUE(xiImaginary1 != xdReal2);
@@ -68,6 +112,78 @@ TEST(ImaginaryReal, Comparison)
 	EXPECT_TRUE(xiReal2 != xdImaginary1);
 	EXPECT_FALSE(xiImaginary2 != xdReal2);
 	EXPECT_FALSE(xiReal2 != xdImaginary2);
+
+    EXPECT_FALSE(xdImaginary1 == xfReal1);
+    EXPECT_FALSE(xdReal1 == xfImaginary1);
+    EXPECT_FALSE(xdImaginary1 == xfReal2);
+    EXPECT_FALSE(xdReal1 == xfImaginary2);
+    EXPECT_FALSE(xdImaginary2 == xfReal1);
+    EXPECT_FALSE(xdReal2 == xfImaginary1);
+    EXPECT_TRUE(xdImaginary2 == xfReal2);
+    EXPECT_TRUE(xdReal2 == xfImaginary2);
+
+    EXPECT_FALSE(xfImaginary1 == xdReal1);
+    EXPECT_FALSE(xfReal1 == xdImaginary1);
+    EXPECT_FALSE(xfImaginary1 == xdReal2);
+    EXPECT_FALSE(xfReal1 == xdImaginary2);
+    EXPECT_FALSE(xfImaginary2 == xdReal1);
+    EXPECT_FALSE(xfReal2 == xdImaginary1);
+    EXPECT_TRUE(xfImaginary2 == xdReal2);
+    EXPECT_TRUE(xfReal2 == xdImaginary2);
+
+    EXPECT_TRUE(xdImaginary1 != xfReal1);
+    EXPECT_TRUE(xdReal1 != xfImaginary1);
+    EXPECT_TRUE(xdImaginary1 != xfReal2);
+    EXPECT_TRUE(xdReal1 != xfImaginary2);
+    EXPECT_TRUE(xdImaginary2 != xfReal1);
+    EXPECT_TRUE(xdReal2 != xfImaginary1);
+    EXPECT_FALSE(xdImaginary2 != xfReal2);
+    EXPECT_FALSE(xdReal2 != xfImaginary2);
+
+    EXPECT_TRUE(xfImaginary1 != xdReal1);
+    EXPECT_TRUE(xfReal1 != xdImaginary1);
+    EXPECT_TRUE(xfImaginary1 != xdReal2);
+    EXPECT_TRUE(xfReal1 != xdImaginary2);
+    EXPECT_TRUE(xfImaginary2 != xdReal1);
+    EXPECT_TRUE(xfReal2 != xdImaginary1);
+    EXPECT_FALSE(xfImaginary2 != xdReal2);
+    EXPECT_FALSE(xfReal2 != xdImaginary2);
+    
+    EXPECT_FALSE(xfImaginary1 == xiReal1);
+    EXPECT_FALSE(xfReal1 == xiImaginary1);
+    EXPECT_FALSE(xfImaginary1 == xiReal2);
+    EXPECT_FALSE(xfReal1 == xiImaginary2);
+    EXPECT_FALSE(xfImaginary2 == xiReal1);
+    EXPECT_FALSE(xfReal2 == xiImaginary1);
+    EXPECT_TRUE(xfImaginary2 == xiReal2);
+    EXPECT_TRUE(xfReal2 == xiImaginary2);
+
+    EXPECT_FALSE(xiImaginary1 == xfReal1);
+    EXPECT_FALSE(xiReal1 == xfImaginary1);
+    EXPECT_FALSE(xiImaginary1 == xfReal2);
+    EXPECT_FALSE(xiReal1 == xfImaginary2);
+    EXPECT_FALSE(xiImaginary2 == xfReal1);
+    EXPECT_FALSE(xiReal2 == xfImaginary1);
+    EXPECT_TRUE(xiImaginary2 == xfReal2);
+    EXPECT_TRUE(xiReal2 == xfImaginary2);
+
+    EXPECT_TRUE(xfImaginary1 != xiReal1);
+    EXPECT_TRUE(xfReal1 != xiImaginary1);
+    EXPECT_TRUE(xfImaginary1 != xiReal2);
+    EXPECT_TRUE(xfReal1 != xiImaginary2);
+    EXPECT_TRUE(xfImaginary2 != xiReal1);
+    EXPECT_TRUE(xfReal2 != xiImaginary1);
+    EXPECT_FALSE(xfImaginary2 != xiReal2);
+    EXPECT_FALSE(xfReal2 != xiImaginary2);
+
+    EXPECT_TRUE(xiImaginary1 != xfReal1);
+    EXPECT_TRUE(xiReal1 != xfImaginary1);
+    EXPECT_TRUE(xiImaginary1 != xfReal2);
+    EXPECT_TRUE(xiReal1 != xfImaginary2);
+    EXPECT_TRUE(xiImaginary2 != xfReal1);
+    EXPECT_TRUE(xiReal2 != xfImaginary1);
+    EXPECT_FALSE(xiImaginary2 != xfReal2);
+    EXPECT_FALSE(xiReal2 != xfImaginary2);
 }
 
 TEST(ImaginaryReal, Addition)
@@ -109,12 +225,6 @@ TEST(ImaginaryReal, Addition)
 	EXPECT_NE(xdReal + xiImaginary, xdResult2);
 	EXPECT_NE(xiImaginary + xdReal, xdResult2);
 	EXPECT_NE(xiReal + xdImaginary, xdResult2);
-
-	// This is a problem of complex comparison, not of our code.
-	//EXPECT_EQ(xdImaginary + xiReal, xiResult);
-	//EXPECT_EQ(xdReal + xiImaginary, xiResult);
-	//EXPECT_EQ(xiImaginary + xdReal, xiResult);
-	//EXPECT_EQ(xiReal + xdImaginary, xiResult);
 }
 
 TEST(ImaginaryReal, Subtraction)
@@ -142,12 +252,6 @@ TEST(ImaginaryReal, Subtraction)
 	EXPECT_EQ(xdReal - xiImaginary, -xdResult);
 	EXPECT_EQ(xiImaginary - xdReal, xdResult);
 	EXPECT_EQ(xiReal - xdImaginary, -xdResult);
-
-	// This is a problem of complex comparison, not of our code.
-	//EXPECT_EQ(xd1 + xiReal, xiResult);
-	//EXPECT_EQ(xdReal + xi1, xiResult);
-	//EXPECT_EQ(xi1 + xdReal, xiResult);
-	//EXPECT_EQ(xiReal + xd1, xiResult);
 }
 
 TEST(ImaginaryReal, Multiplication)
@@ -176,7 +280,6 @@ TEST(ImaginaryReal, Multiplication)
 	EXPECT_EQ(xiImaginary * xdReal, xdResult);
 	EXPECT_EQ(xiReal * xdImaginary, xdResult);
 
-	// This is a problem of complex comparison, not of our code.
 	EXPECT_EQ(xdImaginary * xiReal, xiResult);
 	EXPECT_EQ(xdReal * xiImaginary, xiResult);
 	EXPECT_EQ(xiImaginary * xdReal, xiResult);
@@ -211,4 +314,11 @@ TEST(ImaginaryReal, Division)
 	EXPECT_EQ(xdReal / xiImaginary, xdResult2);
 	EXPECT_EQ(xiImaginary / xdReal, xdResult1);
 	EXPECT_EQ(xiReal / xdImaginary, xdResult2);
+
+    EXPECT_EQ(xdImaginary / xiReal, xiResult1);
+    EXPECT_EQ(xiImaginary / xdReal, xiResult1);
+
+    // 0.5 is not representable in int, these shoule be NE
+    EXPECT_NE(xdReal / xiImaginary, xiResult2);
+    EXPECT_NE(xiReal / xdImaginary, xiResult2);
 }

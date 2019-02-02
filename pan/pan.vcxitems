@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{333b3160-402f-49dd-bc2e-13d0224c5e2b}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)base.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)dual_base.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fixed_point.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)imaginary.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)integer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)levelorder_vector.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)range.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)tag.h" />
+  </ItemGroup>
+</Project>

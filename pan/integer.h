@@ -68,8 +68,8 @@ namespace pan
         // move constructor
         constexpr integer(this_type &&other) noexcept : _value()
         {
-            using std::swap;
-            swap(_value, other._value);
+            using std::exchange;
+            exchange(_value, other._value);
         }
 
         /*constexpr*/ this_type & operator = (const this_type &other)
