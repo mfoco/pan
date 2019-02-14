@@ -65,80 +65,91 @@ namespace pan
 
         constexpr Self operator - () const noexcept(noexcept(-_value))
         {
-            return{ -_value };
+            return Self{ -_value };
         }
 
-        constexpr Self &operator += (const Self &other) noexcept(noexcept(_value += other._value))
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U>, Self>& operator += (const base<U, Tag>& other) noexcept(noexcept(_value += other.value()))
         {
-            _value += other._value;
+            _value += other.value();
             return *this;
         }
 
-        constexpr Self &operator -= (const Self &other) noexcept(noexcept(_value += other._value))
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U>, Self>& operator -= (const base<U, Tag>& other) noexcept(noexcept(_value -= other.value()))
         {
-            _value -= other._value;
+            _value -= other.value();
             return *this;
         }
 
-        constexpr bool operator == (const Self &other) noexcept(noexcept(_value == other._value))
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U>, Self>& operator *= (const U& other) noexcept(noexcept(_value *= other))
         {
-            return _value == other._value;
-        }
-
-        constexpr bool operator != (const Self &other) noexcept(noexcept(_value != other._value))
-        {
-            return _value != other._value;
-        }
-
-        template<typename U> constexpr std::enable_if_t<std::is_same_v<Self, prod_tag_return_t<Self, U>>, Self>& operator *= (const U& other) noexcept(noexcept(_value *= type_tag<U>::value(other) * prod_tag_s<Self, U>))
-        {
-            _value *= type_tag<U>::value(other) *prod_tag_s<Self, U>;
+            _value *= other;
             return *this;
         }
 
-        template<typename U> constexpr std::enable_if_t<std::is_same_v<Self, prod_tag_return_t<Self, U>>, Self> &operator /= (const U& other) noexcept(noexcept(_value /= other))
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U>, Self>& operator /= (const U& other) noexcept(noexcept(_value /= other))
         {
             _value /= other;
             return *this;
         }
+
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, bool> operator == (const base<U, Tag>& other) const noexcept(noexcept(_value == other.value())) 
+        { 
+            return _value == other.value(); 
+        }
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, bool> operator != (const base<U, Tag>& other) const noexcept(noexcept(_value != other.value())) 
+        { 
+            return _value != other.value(); 
+        }
     };
 
-    template <typename T, typename Tag> constexpr bool operator == (const base<T, Tag> &a, const base<T, Tag> &b) noexcept(noexcept(a.value() == b.value()))
+    template <typename T, typename U, typename Tag> constexpr base<std::common_type_t<T, U>, Tag> operator + (const base<T, Tag> &a, const base<U, Tag> &b) noexcept(noexcept(a.value() + b.value()))
     {
-        return a.value() == b.value();
+        return base<std::common_type_t<T, U>, Tag>{ a.value() + b.value() };
     }
 
-    template <typename T, typename Tag> constexpr bool operator != (const base<T, Tag> &a, const base<T, Tag> &b) noexcept(noexcept(a.value() != b.value()))
+    template <typename T, typename U, typename Tag> constexpr base<std::common_type_t<T, U>, Tag> operator - (const base<T, Tag>& a, const base<U, Tag>& b) noexcept(noexcept(a.value() - b.value()))
     {
-        return a.value() != b.value();
+        return base<std::common_type_t<T, U>, Tag>{ a.value() - b.value() };
     }
 
-    template <typename T, typename Tag> constexpr base<T, Tag> operator + (const base<T, Tag> &a, const base<T, Tag> &b) noexcept(noexcept(a.value() + b.value()))
+    template <typename T, typename U, typename Tag1, typename Tag2> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, prod_tag_return_t<base<std::common_type_t<T, U>, Tag1>, base<std::common_type_t<T, U>, Tag2>>> operator * (const base<T, Tag1> &a, const base<U, Tag2> &b) noexcept(noexcept(a.value()*b.value()))
     {
-        return{ a.value() + b.value() };
+        using V = std::common_type_t<T, U>;
+        V l = a.value();
+        V r = b.value();
+        return { l * r * prod_tag_s<base<V, Tag1>, base<V, Tag2>> };
     }
 
-    template <typename T, typename Tag> constexpr base<T, Tag> operator - (const base<T, Tag> &a, const base<T, Tag> &b) noexcept(noexcept(a.value() - b.value()))
+    template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, base<std::common_type_t<T, U>, Tag>> operator * (const base<T, Tag>& a, const U& b) noexcept(noexcept(a.value()* b))
     {
-        return{ a.value() - b.value() };
+        using V = std::common_type_t<T, U>;
+        V l = a.value();
+        V r = b;
+        return base<std::common_type_t<T, U>, Tag>{ l * r };
     }
 
-    template <typename T, typename Tag1, typename Tag2> constexpr
-    auto operator * (const base<T, Tag1> &a, const base<T, Tag2> &b) noexcept(noexcept(a.value()*b.value()*prod_tag_s<base<T, Tag1>, base<T, Tag2>>))
+    template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, base<std::common_type_t<T, U>, Tag>>  operator * (const T& a, const base<U, Tag>& b) noexcept(noexcept(a* b.value()))
     {
-        return prod_tag_return_t<base<T, Tag1>, base<T, Tag2>> { a.value()*b.value()*prod_tag_s<base<T, Tag1>, base<T, Tag2>> };
+        using V = std::common_type_t<T, U>;
+        V l = a;
+        V r = b.value();
+        return base<std::common_type_t<T, U>, Tag>{ l * r };
     }
 
-    template <typename T, typename Tag> constexpr
-    auto operator * (const base<T, Tag> &a, const T &b) noexcept(noexcept(a.value()*b*prod_tag_s<base<T, Tag>, T>))
+    template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, std::common_type_t<T, U>>  operator / (const base<T, Tag>& a, const base<U, Tag>& b) noexcept(noexcept(a.value()/ b.value()))
     {
-        return prod_tag_return_t<base<T, Tag>, T> { a.value()*b*prod_tag_s<base<T, Tag>, T> };
+        using V = std::common_type_t<T, U>;
+        V l = a.value();
+        V r = b.value();
+        return { l / r };
     }
 
-    template <typename T, typename Tag> constexpr
-    auto operator * (const T &a, const base<T, Tag> &b) noexcept(noexcept(a*b.value()*prod_tag_s<T, base<T, Tag>>))
+    template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, base<std::common_type_t<T, U>, Tag>> operator / (const base<T, Tag>& a, const U& b) noexcept(noexcept(a.value() / b))
     {
-        return prod_tag_return_t<T, base<T, Tag>>{ a*b.value()*prod_tag_s<T, base<T, Tag>> };
+        using V = std::common_type_t<T, U>;
+        V l = a.value();
+        V r = b;
+        return { l / r };
     }
 
     constexpr imaginary<float> operator ""_fi(long double f)
