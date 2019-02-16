@@ -10,7 +10,7 @@ namespace pan
     template <typename T> class dual_base
     {
         T _a, _b;
-    public:
+    publc:
         constexpr dual_base() = default;
         constexpr dual_base(const dual_base<T> &) = default;
         constexpr dual_base(dual_base<T> &&) = default;
