@@ -4,9 +4,17 @@
 
 #include <cmath>
 #include <ostream>
+#include <complex>
 
 namespace pan
 {
+    namespace {
+        template <typename T, typename U> using sum_result_t = decltype(std::declval<T>() + std::declval<U>());
+        template <typename T, typename U> using sub_result_t = decltype(std::declval<T>() - std::declval<U>());
+        template <typename T, typename U> using mul_result_t = decltype(std::declval<T>()* std::declval<U>());
+        template <typename T, typename U> using div_result_t = decltype(std::declval<T>() / std::declval<U>());
+    }
+
     template <typename T, typename U> struct prod_tag {};
     template <typename T, typename U> using prod_tag_return_t = typename prod_tag<T, U>::ReturnType;
     template <typename T, typename U> constexpr int prod_tag_s = prod_tag<T, U>::S;
@@ -15,12 +23,32 @@ namespace pan
 
     template <typename T> using real = T;
     template <typename T> using imaginary = base<T, struct Imaginary>;
+    template <typename T> using jmaginary = base<T, struct Jmaginary>;
+    template <typename T> using kmaginary = base<T, struct Kmaginary>;
     template <typename T> using epsilon = base<T, struct Epsilon>;
 
     template<typename T> struct prod_tag<T, T> { using ReturnType = T; constexpr static int S = 1; };
+
     template<typename T> struct prod_tag<imaginary<T>, imaginary<T>> { using ReturnType = T; constexpr static int S = -1; };
     template<typename T> struct prod_tag<imaginary<T>, T> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
     template<typename T> struct prod_tag<T, imaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
+
+    template<typename T> struct prod_tag<jmaginary<T>, jmaginary<T>> { using ReturnType = T; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<jmaginary<T>, T> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
+    template<typename T> struct prod_tag<T, jmaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
+
+    template<typename T> struct prod_tag<kmaginary<T>, kmaginary<T>> { using ReturnType = T; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<kmaginary<T>, T> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
+    template<typename T> struct prod_tag<T, kmaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
+
+    template<typename T> struct prod_tag<imaginary<T>, jmaginary<T>> { using ReturnType = kmaginary<T>; constexpr static int S = 1; };
+    template<typename T> struct prod_tag<jmaginary<T>, imaginary<T>> { using ReturnType = kmaginary<T>; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<jmaginary<T>, kmaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
+    template<typename T> struct prod_tag<kmaginary<T>, jmaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<kmaginary<T>, imaginary<T>> { using ReturnType = jmaginary<T>; constexpr static int S = 1; };
+    template<typename T> struct prod_tag<imaginary<T>, kmaginary<T>> { using ReturnType = jmaginary<T>; constexpr static int S = -1; };
+
+
     template<typename T> struct prod_tag<epsilon<T>, epsilon<T>> { using ReturnType = T; constexpr static int S = 0; };
     template<typename T> struct prod_tag<epsilon<T>, T> { using ReturnType = epsilon<T>; constexpr static int S = 1; };
     template<typename T> struct prod_tag<T, epsilon<T>> { using ReturnType = epsilon<T>; constexpr static int S = 1; };
@@ -96,11 +124,43 @@ namespace pan
         { 
             return _value == other.value(); 
         }
-        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, bool> operator != (const base<U, Tag>& other) const noexcept(noexcept(_value != other.value())) 
+
+        template<typename U> constexpr std::enable_if_t<!std::is_convertible_v<T, U> && !std::is_convertible_v<U, T>, bool> operator == (const base<U, Tag>& other) const noexcept(noexcept(_value == T{} && other.value() == U{}))
+        {
+            return _value == T{} && other.value() == U{};
+        }
+
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, bool> operator == (const U& other) const noexcept(noexcept(_value == T{} && other == U{}))
+        {
+            return _value == T{} && other == U{};
+        }
+
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, bool> operator != (const base<U, Tag>& other) const noexcept(noexcept(_value != other.value()))
         { 
             return _value != other.value(); 
         }
+
+        template<typename U> constexpr std::enable_if_t<!std::is_convertible_v<T, U> && !std::is_convertible_v<U, T>, bool> operator != (const base<U, Tag>& other) const noexcept(noexcept(_value != T{} || other.value() != U{}))
+        {
+            return _value != T{} || other.value() != U{};
+        }
+
+        template<typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, bool> operator != (const U& other) const noexcept(noexcept(_value != T{} || other != U{}))
+        {
+            return _value != T{} || other != U{};
+        }
+
     };
+
+    template <typename T, typename Tag, typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, bool> operator == (const U& left, const base<T, Tag>& right) noexcept(noexcept(left == U{} && right.value() == T{}))
+    {
+        return left == U{} && right.value() == T{};
+    }
+
+    template <typename T, typename Tag, typename U> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, bool> operator != (const U& left, const base<T, Tag>& right) noexcept(noexcept(left != U{} || right.value() != T{}))
+    {
+        return left != U{} || right.value() != T{};
+    }
 
     template <typename T, typename U, typename Tag> constexpr base<std::common_type_t<T, U>, Tag> operator + (const base<T, Tag> &a, const base<U, Tag> &b) noexcept(noexcept(a.value() + b.value()))
     {
@@ -117,7 +177,7 @@ namespace pan
         using V = std::common_type_t<T, U>;
         V l = a.value();
         V r = b.value();
-        return { l * r * prod_tag_s<base<V, Tag1>, base<V, Tag2>> };
+        return prod_tag_return_t<base<V, Tag1>, base<V, Tag2>>{ l * r * prod_tag_s<base<V, Tag1>, base<V, Tag2>> };
     }
 
     template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, base<std::common_type_t<T, U>, Tag>> operator * (const base<T, Tag>& a, const U& b) noexcept(noexcept(a.value()* b))
@@ -125,7 +185,7 @@ namespace pan
         using V = std::common_type_t<T, U>;
         V l = a.value();
         V r = b;
-        return base<std::common_type_t<T, U>, Tag>{ l * r };
+        return base<V, Tag>{ l * r };
     }
 
     template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, base<std::common_type_t<T, U>, Tag>>  operator * (const T& a, const base<U, Tag>& b) noexcept(noexcept(a* b.value()))
@@ -133,7 +193,7 @@ namespace pan
         using V = std::common_type_t<T, U>;
         V l = a;
         V r = b.value();
-        return base<std::common_type_t<T, U>, Tag>{ l * r };
+        return base<V, Tag>{ l * r };
     }
 
     template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, std::common_type_t<T, U>>  operator / (const base<T, Tag>& a, const base<U, Tag>& b) noexcept(noexcept(a.value()/ b.value()))
@@ -141,7 +201,7 @@ namespace pan
         using V = std::common_type_t<T, U>;
         V l = a.value();
         V r = b.value();
-        return { l / r };
+        return l / r;
     }
 
     template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, base<std::common_type_t<T, U>, Tag>> operator / (const base<T, Tag>& a, const U& b) noexcept(noexcept(a.value() / b))
@@ -149,7 +209,12 @@ namespace pan
         using V = std::common_type_t<T, U>;
         V l = a.value();
         V r = b;
-        return { l / r };
+        return base<V, Tag>{ l / r };
+    }
+
+    template <typename T, typename U, typename Tag> constexpr std::enable_if_t<std::is_convertible_v<T, U> || std::is_convertible_v<U, T>, base<std::common_type_t<T, U>, Tag>> operator / (const U& left, const base<T, Tag>& right) noexcept(noexcept((left* right) / (right * right)))
+    {
+        return (left*right) / (right*right);
     }
 
     constexpr imaginary<float> operator ""_fi(long double f)
@@ -180,6 +245,102 @@ namespace pan
     constexpr epsilon<long double> operator ""_leps(long double f)
     {
         return epsilon<long double>(f);
+    }
+
+    template <typename T, typename U> constexpr std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, bool> operator == (const std::complex<T> & a, const imaginary<U> & b)
+    {
+        return (a.real() == T{}) && (a.imag() == b.value());
+    }
+
+    template <typename T, typename U> constexpr std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, bool> operator == (const imaginary<T> & a, const std::complex<U> & b)
+    {
+        return (b.real() == T{}) && (a.value() == b.imag());
+    }
+
+    template <typename T, typename U> constexpr std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, bool> operator != (const std::complex<T> & a, const imaginary<U> & b)
+    {
+        return (a.real() != T{}) || (a.imag() != b.value());
+    }
+
+    template <typename T, typename U> constexpr std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, bool> operator != (const imaginary<T> & a, const std::complex<U> & b)
+    {
+        return (b.real() != T{}) || (a.value() != b.imag());
+    }
+
+    template <typename T, typename U> constexpr auto operator + (const T & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sum_result_t<T, U>>> {
+        return std::complex<sum_result_t<T, U>>(a, b.value());
+    }
+
+    template <typename T, typename U> constexpr auto operator + (const imaginary<T> & a, const U & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sum_result_t<T, U>>> {
+        return std::complex<sum_result_t<T, U>>(b, a.value());
+    }
+
+    template <typename T, typename U> constexpr auto operator + (const std::complex<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sum_result_t<T, U>>> {
+        return std::complex<sum_result_t<T, U>>(a.real(), a.imag() + b.value());
+    }
+
+    template <typename T, typename U> constexpr auto operator + (const imaginary<T> & a, const std::complex<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sum_result_t<T, U>>> {
+        return std::complex<sum_result_t<T, U>>(b.real(), a.value() + b.imag());
+    }
+
+    //template <typename T, typename U> constexpr auto operator - (const imaginary<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<sub_result_t<T, U>>> {
+    //    return imaginary<sub_result_t<T, U>>{ a.value() - b.value() };
+    //}
+
+    template <typename T, typename U> constexpr auto operator - (const T & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sub_result_t<T, U>>> {
+        return std::complex<sub_result_t<T, U>>(a, -b.value());
+    }
+
+    template <typename T, typename U> constexpr auto operator - (const imaginary<T> & a, const U & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sub_result_t<T, U>>> {
+        return std::complex<sub_result_t<T, U>>(-b, a.value());
+    }
+
+    template <typename T, typename U> constexpr auto operator - (const std::complex<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sub_result_t<T, U>>> {
+        return std::complex<sub_result_t<T, U>>(a.real(), a.imag() - b.value());
+    }
+
+    template <typename T, typename U> constexpr auto operator - (const imaginary<T> & a, const std::complex<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sub_result_t<T, U>>> {
+        return std::complex<sub_result_t<T, U>>(-b.real(), a.value() - b.imag());
+    }
+
+    //template <typename T, typename U> constexpr auto operator * (const imaginary<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, mul_result_t<T, U>> {
+    //    return { -a.value() * b.value() };
+    //}
+
+    //template <typename T, typename U> constexpr auto operator * (const T & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<mul_result_t<T, U>>> {
+    //    return imaginary<mul_result_t<T, U>>{ a* b.value() };
+    //}
+
+    //template <typename T, typename U> constexpr auto operator * (const imaginary<T> & a, const U & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<mul_result_t<T, U>>> {
+    //    return imaginary<mul_result_t<T, U>>{ a.value()* b };
+    //}
+
+    template <typename T, typename U> constexpr auto operator * (const std::complex<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<mul_result_t<T, U>>> {
+        return { -a.imag() * b.value(), a.real() * b.value() };
+    }
+
+    template <typename T, typename U> constexpr auto operator * (const imaginary<T> & a, const std::complex<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<mul_result_t<T, U>>> {
+        return { -a.value() * b.imag(), a.value() * b.real() };
+    }
+
+    //template <typename T, typename U> constexpr auto operator / (const imaginary<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, div_result_t<T, U>> {
+    //    return { a.value() / b.value() };
+    //}
+
+    //template <typename T, typename U> constexpr auto operator / (const T & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<div_result_t<T, U>>> {
+    //    return imaginary<mul_result_t<T, U>>{ -a / b.value() };
+    //}
+
+    //template <typename T, typename U> constexpr auto operator / (const imaginary<T> & a, const U & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<div_result_t<T, U>>> {
+    //    return imaginary<mul_result_t<T, U>>{ a.value() / b };
+    //}
+
+    template <typename T, typename U> constexpr auto operator / (const std::complex<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<div_result_t<T, U>>> {
+        return { a.imag() / b.value(), -a.real() / b.value() };
+    }
+
+    template <typename T, typename U> constexpr auto operator / (const imaginary<T> & a, const std::complex<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<div_result_t<T, U>>> {
+        return { a.value() * b.imag() / (b.real() * b.real() + b.imag() * b.imag()), a.value() * b.real() / (b.real() * b.real() + b.imag() * b.imag()) };
     }
 }
 
