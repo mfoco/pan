@@ -15,33 +15,54 @@ namespace pan
         template <typename T, typename U> using div_result_t = decltype(std::declval<T>() / std::declval<U>());
     }
 
-    template <typename T, typename U> struct prod_tag {};
+    template <typename T, typename U, typename Spec = void> struct prod_tag {};
     template <typename T, typename U> using prod_tag_return_t = typename prod_tag<T, U>::ReturnType;
     template <typename T, typename U> constexpr int prod_tag_s = prod_tag<T, U>::S;
 
     template <typename T, typename _Tag> class base;
 
     template <typename T> using real = T;
-    template <int T> struct Imaginary;
+    template <int T> struct Imaginary {};
     template <typename T, int N> using imaginary_base = base<T, Imaginary<N>>;
     template <typename T> using imaginary = imaginary_base<T, 0>;
-    template <typename T> using jmaginary = base<T, Imaginary<1>>;
-    template <typename T> using kmaginary = base<T, Imaginary<2>>;
+    template <typename T> using jmaginary = imaginary_base<T, 1>;
+    template <typename T> using kmaginary = imaginary_base<T, 2>;
     template <typename T> using epsilon = base<T, struct Epsilon>;
 
-    template<typename T> struct prod_tag<T, T> { using ReturnType = T; constexpr static int S = 1; };
+    //template<typename T> struct prod_tag<T, T> { using ReturnType = T; constexpr static int S = 1; };
 
     template<typename T, int N> struct prod_tag<imaginary_base<T, N>, imaginary_base<T, N>> { using ReturnType = T; constexpr static int S = -1; };
     template<typename T, int N> struct prod_tag<imaginary_base<T, N>, T> { using ReturnType = imaginary_base<T, N>; constexpr static int S = 1; };
     template<typename T, int N> struct prod_tag<T, imaginary_base<T, N>> { using ReturnType = imaginary_base<T, N>; constexpr static int S = 1; };
 
-    template<typename T> struct prod_tag<imaginary<T>, jmaginary<T>> { using ReturnType = kmaginary<T>; constexpr static int S = 1; };
-    template<typename T> struct prod_tag<jmaginary<T>, imaginary<T>> { using ReturnType = kmaginary<T>; constexpr static int S = -1; };
-    template<typename T> struct prod_tag<jmaginary<T>, kmaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
-    template<typename T> struct prod_tag<kmaginary<T>, jmaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = -1; };
-    template<typename T> struct prod_tag<kmaginary<T>, imaginary<T>> { using ReturnType = jmaginary<T>; constexpr static int S = 1; };
-    template<typename T> struct prod_tag<imaginary<T>, kmaginary<T>> { using ReturnType = jmaginary<T>; constexpr static int S = -1; };
+    template<typename T, int N, int M> struct prod_tag<imaginary_base<T, N>, imaginary_base<T, M>, typename std::enable_if_t<(N > M)>> { using ReturnType = typename prod_tag<imaginary_base<T, M>, imaginary_base<T, N>>::ReturnType; constexpr static int S = - prod_tag<imaginary_base<T, M>, imaginary_base<T, N>>::S; };
 
+    template<typename T> struct prod_tag<imaginary_base<T, 0>, imaginary_base<T, 1>> { using ReturnType = imaginary_base<T, 2>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 0>, imaginary_base<T, 2>> { using ReturnType = imaginary_base<T, 1>; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 0>, imaginary_base<T, 3>> { using ReturnType = imaginary_base<T, 4>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 0>, imaginary_base<T, 4>> { using ReturnType = imaginary_base<T, 3>; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 0>, imaginary_base<T, 5>> { using ReturnType = imaginary_base<T, 6>; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 0>, imaginary_base<T, 6>> { using ReturnType = imaginary_base<T, 5>; constexpr static int S = +1; };
+
+    template<typename T> struct prod_tag<imaginary_base<T, 1>, imaginary_base<T, 2>> { using ReturnType = imaginary_base<T, 0>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 1>, imaginary_base<T, 3>> { using ReturnType = imaginary_base<T, 5>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 1>, imaginary_base<T, 4>> { using ReturnType = imaginary_base<T, 6>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 1>, imaginary_base<T, 5>> { using ReturnType = imaginary_base<T, 3>; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 1>, imaginary_base<T, 6>> { using ReturnType = imaginary_base<T, 4>; constexpr static int S = -1; };
+
+    template<typename T> struct prod_tag<imaginary_base<T, 2>, imaginary_base<T, 3>> { using ReturnType = imaginary_base<T, 6>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 2>, imaginary_base<T, 4>> { using ReturnType = imaginary_base<T, 5>; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 2>, imaginary_base<T, 5>> { using ReturnType = imaginary_base<T, 4>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 2>, imaginary_base<T, 6>> { using ReturnType = imaginary_base<T, 3>; constexpr static int S = -1; };
+
+    template<typename T> struct prod_tag<imaginary_base<T, 3>, imaginary_base<T, 4>> { using ReturnType = imaginary_base<T, 0>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 3>, imaginary_base<T, 5>> { using ReturnType = imaginary_base<T, 1>; constexpr static int S = +1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 3>, imaginary_base<T, 6>> { using ReturnType = imaginary_base<T, 2>; constexpr static int S = +1; };
+
+    template<typename T> struct prod_tag<imaginary_base<T, 4>, imaginary_base<T, 5>> { using ReturnType = imaginary_base<T, 2>; constexpr static int S = -1; };
+    template<typename T> struct prod_tag<imaginary_base<T, 4>, imaginary_base<T, 6>> { using ReturnType = imaginary_base<T, 1>; constexpr static int S = +1; };
+
+    template<typename T> struct prod_tag<imaginary_base<T, 5>, imaginary_base<T, 6>> { using ReturnType = imaginary_base<T, 0>; constexpr static int S = -1; };
 
     template<typename T> struct prod_tag<epsilon<T>, epsilon<T>> { using ReturnType = T; constexpr static int S = 0; };
     template<typename T> struct prod_tag<epsilon<T>, T> { using ReturnType = epsilon<T>; constexpr static int S = 1; };
@@ -277,10 +298,6 @@ namespace pan
         return std::complex<sum_result_t<T, U>>(b.real(), a.value() + b.imag());
     }
 
-    //template <typename T, typename U> constexpr auto operator - (const imaginary<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<sub_result_t<T, U>>> {
-    //    return imaginary<sub_result_t<T, U>>{ a.value() - b.value() };
-    //}
-
     template <typename T, typename U> constexpr auto operator - (const T & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<sub_result_t<T, U>>> {
         return std::complex<sub_result_t<T, U>>(a, -b.value());
     }
@@ -297,18 +314,6 @@ namespace pan
         return std::complex<sub_result_t<T, U>>(-b.real(), a.value() - b.imag());
     }
 
-    //template <typename T, typename U> constexpr auto operator * (const imaginary<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, mul_result_t<T, U>> {
-    //    return { -a.value() * b.value() };
-    //}
-
-    //template <typename T, typename U> constexpr auto operator * (const T & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<mul_result_t<T, U>>> {
-    //    return imaginary<mul_result_t<T, U>>{ a* b.value() };
-    //}
-
-    //template <typename T, typename U> constexpr auto operator * (const imaginary<T> & a, const U & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<mul_result_t<T, U>>> {
-    //    return imaginary<mul_result_t<T, U>>{ a.value()* b };
-    //}
-
     template <typename T, typename U> constexpr auto operator * (const std::complex<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<mul_result_t<T, U>>> {
         return { -a.imag() * b.value(), a.real() * b.value() };
     }
@@ -316,18 +321,6 @@ namespace pan
     template <typename T, typename U> constexpr auto operator * (const imaginary<T> & a, const std::complex<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<mul_result_t<T, U>>> {
         return { -a.value() * b.imag(), a.value() * b.real() };
     }
-
-    //template <typename T, typename U> constexpr auto operator / (const imaginary<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, div_result_t<T, U>> {
-    //    return { a.value() / b.value() };
-    //}
-
-    //template <typename T, typename U> constexpr auto operator / (const T & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<div_result_t<T, U>>> {
-    //    return imaginary<mul_result_t<T, U>>{ -a / b.value() };
-    //}
-
-    //template <typename T, typename U> constexpr auto operator / (const imaginary<T> & a, const U & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, imaginary<div_result_t<T, U>>> {
-    //    return imaginary<mul_result_t<T, U>>{ a.value() / b };
-    //}
 
     template <typename T, typename U> constexpr auto operator / (const std::complex<T> & a, const imaginary<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<div_result_t<T, U>>> {
         return { a.imag() / b.value(), -a.real() / b.value() };
