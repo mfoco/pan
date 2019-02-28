@@ -22,24 +22,18 @@ namespace pan
     template <typename T, typename _Tag> class base;
 
     template <typename T> using real = T;
-    template <typename T> using imaginary = base<T, struct Imaginary>;
-    template <typename T> using jmaginary = base<T, struct Jmaginary>;
-    template <typename T> using kmaginary = base<T, struct Kmaginary>;
+    template <int T> struct Imaginary;
+    template <typename T, int N> using imaginary_base = base<T, Imaginary<N>>;
+    template <typename T> using imaginary = imaginary_base<T, 0>;
+    template <typename T> using jmaginary = base<T, Imaginary<1>>;
+    template <typename T> using kmaginary = base<T, Imaginary<2>>;
     template <typename T> using epsilon = base<T, struct Epsilon>;
 
     template<typename T> struct prod_tag<T, T> { using ReturnType = T; constexpr static int S = 1; };
 
-    template<typename T> struct prod_tag<imaginary<T>, imaginary<T>> { using ReturnType = T; constexpr static int S = -1; };
-    template<typename T> struct prod_tag<imaginary<T>, T> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
-    template<typename T> struct prod_tag<T, imaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
-
-    template<typename T> struct prod_tag<jmaginary<T>, jmaginary<T>> { using ReturnType = T; constexpr static int S = -1; };
-    template<typename T> struct prod_tag<jmaginary<T>, T> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
-    template<typename T> struct prod_tag<T, jmaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
-
-    template<typename T> struct prod_tag<kmaginary<T>, kmaginary<T>> { using ReturnType = T; constexpr static int S = -1; };
-    template<typename T> struct prod_tag<kmaginary<T>, T> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
-    template<typename T> struct prod_tag<T, kmaginary<T>> { using ReturnType = imaginary<T>; constexpr static int S = 1; };
+    template<typename T, int N> struct prod_tag<imaginary_base<T, N>, imaginary_base<T, N>> { using ReturnType = T; constexpr static int S = -1; };
+    template<typename T, int N> struct prod_tag<imaginary_base<T, N>, T> { using ReturnType = imaginary_base<T, N>; constexpr static int S = 1; };
+    template<typename T, int N> struct prod_tag<T, imaginary_base<T, N>> { using ReturnType = imaginary_base<T, N>; constexpr static int S = 1; };
 
     template<typename T> struct prod_tag<imaginary<T>, jmaginary<T>> { using ReturnType = kmaginary<T>; constexpr static int S = 1; };
     template<typename T> struct prod_tag<jmaginary<T>, imaginary<T>> { using ReturnType = kmaginary<T>; constexpr static int S = -1; };
