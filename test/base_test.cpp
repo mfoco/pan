@@ -1,6 +1,8 @@
 
 #include <gtest/gtest.h>
 #include <pan/base.h>
+#include <imaginary.h>
+#include <dual_base.hpp>
 
 using namespace pan;
 
