@@ -1,5 +1,5 @@
 
-#include <pan/imaginary.h>
+#include <pan/imaginary.hpp>
 #include <gtest/gtest.h>
 
 using namespace pan;

@@ -2,7 +2,7 @@
 #ifndef _DUAL_BASE_
 #define _DUAL_BASE_
 
-#include <base.h>
+#include "base.hpp"
 
 namespace pan {
     template <int N> struct Epsilon;
