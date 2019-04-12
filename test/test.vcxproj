@@ -55,6 +55,7 @@
     <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="arithmetic_tuple_test.cpp" />
     <ClCompile Include="base_test.cpp" />
     <ClCompile Include="imaginary_complex_test.cpp" />
     <ClCompile Include="imaginary_real_test.cpp" />
