@@ -17,7 +17,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)arithmetic_tuple.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)base.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)dual.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)fixed_point.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)imaginary.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)integer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)levelorder_vector.hpp" />
