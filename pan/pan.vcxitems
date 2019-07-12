@@ -16,6 +16,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)arithmetic_tuple.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)base.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)diff.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)dual.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)imaginary.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)integer.h" />
