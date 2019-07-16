@@ -8,6 +8,7 @@
 
 #include <iostream>
 
+using namespace std;
 using namespace pan::diff;
 using namespace pan::expr;
 using namespace pan::opt;
@@ -20,12 +21,14 @@ using df2 = diff_t<2, f>;
 using df3 = diff_t<3, f>;
 using df4 = diff_t<4, f>;
 
-using of   = opt_t<opt_t<opt_t<opt_t<opt_t<f>>>>>;
-using odf0 = opt_t<opt_t<opt_t<opt_t<opt_t<df0>>>>>;
-using odf1 = opt_t<opt_t<opt_t<opt_t<opt_t<df1>>>>>;
-using odf2 = opt_t<opt_t<opt_t<opt_t<opt_t<df2>>>>>;
-using odf3 = opt_t<opt_t<opt_t<opt_t<opt_t<df3>>>>>;
-using odf4 = opt_t<opt_t<opt_t<opt_t<opt_t<df4>>>>>;
+
+
+using of   = recursive_opt_t<f>;
+using odf0 = recursive_opt_t<df0>;
+using odf1 = recursive_opt_t<df1>;
+using odf2 = recursive_opt_t<df2>;
+using odf3 = recursive_opt_t<df3>;
+using odf4 = recursive_opt_t<df4>;
 
 int main() {
 	static_assert(is_integral_constant<std::integral_constant<int, 0>>::value);

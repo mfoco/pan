@@ -134,4 +134,16 @@ namespace pan::opt {
 		using type = std::integral_constant<int, N>;
 	};
 
+	/* Recursive Optimization */
+
+	template<typename T, typename TC = void> struct recursive_opt
+	{
+		using type = T;
+	};
+
+	template<typename T> struct recursive_opt<T, std::enable_if_t<!std::is_same_v<T, opt_t<T>>>> : recursive_opt<opt_t<T>>
+	{
+	};
+	
+	template<typename T> using recursive_opt_t = typename recursive_opt<T>::type;
 }
