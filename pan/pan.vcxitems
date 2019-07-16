@@ -18,9 +18,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)base.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)diff.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)dual.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)expr.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)expr_printer.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)imaginary.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)integer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)levelorder_vector.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)opt.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)range.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)tag.h" />
   </ItemGroup>

@@ -1,13 +1,19 @@
 
 #include <gtest/gtest.h>
+
+#include <pan/expr.hpp>
 #include <pan/diff.hpp>
+#include <pan/opt.hpp>
+#include <pan/expr_printer.hpp>
 
 #include <iostream>
 
 using namespace pan::diff;
+using namespace pan::expr;
+using namespace pan::opt;
 
 using f = sumOp<mulOp<subOp<divOp<var<0>, var<1>>, var<2>>, var<3>>, var<4>>;
-//using f = sumOp<var<0>, int_const<0>>;
+//using f = sumOp<var<0>, std::integral_constant<int, 0>>;
 using df0 = diff_t<0, f>;
 using df1 = diff_t<1, f>;
 using df2 = diff_t<2, f>;
@@ -22,20 +28,20 @@ using odf3 = opt_t<opt_t<opt_t<opt_t<opt_t<df3>>>>>;
 using odf4 = opt_t<opt_t<opt_t<opt_t<opt_t<df4>>>>>;
 
 int main() {
-	static_assert(is_int_const<int_const<0>>::value);
-	static_assert(!is_int_const<var<0>>::value);
-	static_assert(!is_int_const<sumOp<var<2>, int_const<5>>>::value);
+	static_assert(is_integral_constant<std::integral_constant<int, 0>>::value);
+	static_assert(!is_integral_constant<var<0>>::value);
+	static_assert(!is_integral_constant<sumOp<var<2>, std::integral_constant<int, 5>>>::value);
 
-	std::cout << f().toString() << std::endl;
-	std::cout << df0().toString() << std::endl;
-	std::cout << df1().toString() << std::endl;
-	std::cout << df2().toString() << std::endl;
-	std::cout << df3().toString() << std::endl;
-	std::cout << df4().toString() << std::endl;
-	std::cout << of().toString() << std::endl;
-	std::cout << odf0().toString() << std::endl;
-	std::cout << odf1().toString() << std::endl;
-	std::cout << odf2().toString() << std::endl;
-	std::cout << odf3().toString() << std::endl;
-	std::cout << odf4().toString() << std::endl;
+	std::cout << to_string(f()) << std::endl;
+	std::cout << to_string(df0()) << std::endl;
+	std::cout << to_string(df1()) << std::endl;
+	std::cout << to_string(df2()) << std::endl;
+	std::cout << to_string(df3()) << std::endl;
+	std::cout << to_string(df4()) << std::endl;
+	std::cout << to_string(of()) << std::endl;
+	std::cout << to_string(odf0()) << std::endl;
+	std::cout << to_string(odf1()) << std::endl;
+	std::cout << to_string(odf2()) << std::endl;
+	std::cout << to_string(odf3()) << std::endl;
+	std::cout << to_string(odf4()) << std::endl;
 }
