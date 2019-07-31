@@ -4,7 +4,6 @@
 
 #include <cmath>
 #include <ostream>
-#include <complex>
 
 namespace pan
 {
@@ -23,7 +22,7 @@ namespace pan
 
     template<int N> struct Real {};
     template <typename T, int N = 0> struct base_real {
-        using type = typename base<T, Real<N>>;
+        using type = base<T, Real<N>>;
     };
     template <typename T> struct base_real<T, 0> {
         using type = T;

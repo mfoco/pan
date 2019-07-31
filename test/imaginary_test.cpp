@@ -37,10 +37,10 @@ TEST(Imaginary, CopyConstruction)
 	imaginary<long double> xl{ 50.1l };
 	imaginary<int> xi{ 50 };
 
-	imaginary<float> xf2{ xf };
-	imaginary<double> xd2{ xd };
-	imaginary<long double> xl2{ xl };
-	imaginary<int> xi2{ xi };
+	const imaginary<float> xf2{ xf };
+	const imaginary<double> xd2{ xd };
+	const imaginary<long double> xl2{ xl };
+	const imaginary<int> xi2{ xi };
 
 	EXPECT_EQ(xf.value(), xf2.value());
 	EXPECT_EQ(xd.value(), xd2.value());
@@ -73,10 +73,12 @@ TEST(Imaginary, CopyAssignment)
 	imaginary<long double> xl{ 50.1l };
 	imaginary<int> xi{ 50 };
 
+	// ReSharper disable CppJoinDeclarationAndAssignment
 	imaginary<float> xf2;
 	imaginary<double> xd2;
 	imaginary<long double> xl2;
 	imaginary<int> xi2;
+	// ReSharper restore CppJoinDeclarationAndAssignment
 
 	xf2 = xf;
 	xd2 = xd;
@@ -96,10 +98,12 @@ TEST(Imaginary, MoveAssignment)
 	imaginary<long double> xl{ 50.1l };
 	imaginary<int> xi{ 50 };
 
+	// ReSharper disable CppJoinDeclarationAndAssignment
 	imaginary<float> xf2;
 	imaginary<double> xd2;
 	imaginary<long double> xl2;
 	imaginary<int> xi2;
+	// ReSharper restore CppJoinDeclarationAndAssignment
 
 	xf2 = std::move(xf);
 	xd2 = std::move(xd);
@@ -248,13 +252,13 @@ TEST(Imaginary, Addition)
 {
 	auto xd1 = 50.0_i;
 	auto xd2 = 25.0_i;
-	auto xdResult = 75.0_i;
+	const auto xdResult = 75.0_i;
 	auto xf1 = 50.0_fi;
 	auto xf2 = 25.0_fi;
-	auto xfResult = 75.0_fi;
+	const auto xfResult = 75.0_fi;
 	imaginary<int> xi1{ 50 };
 	imaginary<int> xi2{ 25 };
-	imaginary<int> xiResult{ 75 };
+	const imaginary<int> xiResult{ 75 };
 
 	// same type
 	EXPECT_EQ(xd1 + xd2, xdResult);
@@ -279,13 +283,13 @@ TEST(Imaginary, Subtraction)
 {
 	auto xd1 = 50.0_i;
 	auto xd2 = 27.0_i;
-	auto xdResult = 23.0_i;
+	const auto xdResult = 23.0_i;
 	auto xf1 = 50.0_fi;
 	auto xf2 = 27.0_fi;
-	auto xfResult = 23.0_fi;
+	const auto xfResult = 23.0_fi;
 	imaginary<int> xi1{ 50 };
 	imaginary<int> xi2{ 27 };
-	imaginary<int> xiResult{ 23 };
+	const imaginary<int> xiResult{ 23 };
 
 	// same type
 	EXPECT_EQ(xd1 - xd2, xdResult);
@@ -310,13 +314,13 @@ TEST(Imaginary, Multiplication)
 {
 	auto xd1 = 50.0_i;
 	auto xd2 = 25.0_i;
-	auto xdResult = -1250.0;
+	const auto xdResult = -1250.0;
 	auto xf1 = 50.0_fi;
 	auto xf2 = 25.0_fi;
-	auto xfResult = -1250.0f;
+	const auto xfResult = -1250.0f;
 	imaginary<int> xi1{ 50 };
 	imaginary<int> xi2{ 25 };
-	auto xiResult = -1250;
+	const auto xiResult = -1250;
 
 	// same type
 	EXPECT_EQ(xd1 * xd2, xdResult);
@@ -341,16 +345,16 @@ TEST(Imaginary, Division)
 {
 	auto xd1 = 50.0_i;
 	auto xd2 = 25.0_i;
-	auto xdResult1 = 2.0;
-	auto xdResult2 = 0.5;
+	const auto xdResult1 = 2.0;
+	const auto xdResult2 = 0.5;
 	auto xf1 = 50.0_fi;
 	auto xf2 = 25.0_fi;
-	auto xfResult1 = 2.0f;
-	auto xfResult2 = 0.5f;
+	const auto xfResult1 = 2.0f;
+	const auto xfResult2 = 0.5f;
 	imaginary<int> xi1{ 50 };
 	imaginary<int> xi2{ 25 };
-	auto xiResult1 = 2;
-	auto xiResult2 = 0;
+	const auto xiResult1 = 2;
+	const auto xiResult2 = 0;
 
 	// same type
 	EXPECT_EQ(xd1 / xd2, xdResult1);

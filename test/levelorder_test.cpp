@@ -104,13 +104,13 @@ template<
 		const char* title,
 		const char* name1, const char* name2, const char* name3, const char* name4)
 {
-	unsigned int n0 = 15, n1 = 3000000, dn = 2000;
-	double       fdn = 1.2;
+	const unsigned int n0 = 15;
+	const unsigned int n1 = 3000000;
 
 	std::cout << title << ":" << std::endl;
 	std::cout << name1 << ";" << name2 << ";" << name3 << std::endl;
 
-	for (unsigned int n = n0; n <= n1; n = (unsigned int)((n+1)*16-1)) {
+	for (unsigned int n = n0; n <= n1; n = (n+1)*16-1) {
 		double t;
 		{
 			auto c = create<Container1>(n);
@@ -146,10 +146,10 @@ int main()
 	typedef levelorder_vector<unsigned int>          container_t3;
 	typedef chunked_levelorder_vector          container_t4;
 
-	auto v1 = create<chunked_levelorder_vector>(15);
+	const auto v1 = create<chunked_levelorder_vector>(15);
 	auto v2 = create<chunked_levelorder_vector>(16);
-	auto v3 = create<chunked_levelorder_vector>(255);
-	auto v4 = create<chunked_levelorder_vector>(256);
+	const auto v3 = create<chunked_levelorder_vector>(255);
+	const auto v4 = create<chunked_levelorder_vector>(256);
 	auto a = v1.lower_bound(10);
 	auto b = v3.lower_bound(100);
 	auto c = v4.lower_bound(1000);

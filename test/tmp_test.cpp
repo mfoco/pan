@@ -86,12 +86,12 @@ template <typename... R> struct join<nullptr_t, R...>
 	using type = typename join<R...>::type;
 };
 
-template <int N, typename L> struct count_occurrencies
+template <int N, typename L> struct count_occurrences
 {
-	constexpr static int value = ((N == L::first) ? 1 : 0) + count_occurrencies<N, typename L::rest>::value;
+	constexpr static int value = ((N == L::first) ? 1 : 0) + count_occurrences<N, typename L::rest>::value;
 };
 
-template <int N> struct count_occurrencies<N, nullptr_t>
+template <int N> struct count_occurrences<N, nullptr_t>
 {
 	constexpr static int value = 0;
 };
@@ -108,33 +108,33 @@ template <int V> struct repeat<V, 0>
 
 template <int V, int N> using repeat_t = typename repeat<V, N>::type;
 
-//template <int N, typename L> struct remove_first_occurrency
+//template <int N, typename L> struct remove_first_occurrence
 //{
-//	using type = static_list<L::first, typename remove_first_occurrency<N, typename L::rest>::type>;
+//	using type = static_list<L::first, typename remove_first_occurrence<N, typename L::rest>::type>;
 //};
 //
-//template <int N, typename L> struct remove_first_occurrency<N, L> : std::enable_if<L::first == N>
+//template <int N, typename L> struct remove_first_occurrence<N, L> : std::enable_if<L::first == N>
 //{
 //	using type = typename L::rest;
 //};
 //
-//template <int N, typename L> using remove_first_occurrency_t = typename remove_first_occurrency<N, L>::type;
+//template <int N, typename L> using remove_first_occurrence_t = typename remove_first_occurrence<N, L>::type;
 //
 //
-//template <int N, typename L> struct remove_all_occurrencies<N, L> : std::enable_if<N == L::first>, remove_all_occurrencies<N, typename L::rest>
+//template <int N, typename L> struct remove_all_occurrences<N, L> : std::enable_if<N == L::first>, remove_all_occurrences<N, typename L::rest>
 //{
 //};
 //
-//template <int N, typename L> struct remove_all_occurrencies<N, L> : std::enable_if<N != L::first>
+//template <int N, typename L> struct remove_all_occurrences<N, L> : std::enable_if<N != L::first>
 //{
-//	using type = static_list<L::first, typename remove_all_occurrencies<N, typename L::rest>::type>;
+//	using type = static_list<L::first, typename remove_all_occurrences<N, typename L::rest>::type>;
 //};
 //
-//template <int N, typename L> using remove_all_occurrencies_t = typename remove_all_occurrencies<N, L>::type;
+//template <int N, typename L> using remove_all_occurrences_t = typename remove_all_occurrences<N, L>::type;
 //
 //template <typename L> struct remove_duplicates
 //{
-//	using type = static_list<L::first, typename remove_duplicates<remove_all_occurrencies_t<L::first, typename L::rest>>::type>;
+//	using type = static_list<L::first, typename remove_duplicates<remove_all_occurrences_t<L::first, typename L::rest>>::type>;
 //};
 
 
@@ -153,9 +153,9 @@ void maiunagioja()
 	using biglist = join_t<q, q1, q23, q11, q21>;
 
 	std::cout << take_t<skip_t<push_front_t<0, make_static_list_t<1, 2, 3, 4>>, 2>, 2>::first << std::endl;
-	std::cout << count_occurrencies<1, biglist>::value << std::endl;
-	std::cout << count_occurrencies<1, repeat_t<1, 10>>::value << std::endl;
-	std::cout << count_occurrencies<1, repeat_t<2, 10>>::value << std::endl;
+	std::cout << count_occurrences<1, biglist>::value << std::endl;
+	std::cout << count_occurrences<1, repeat_t<1, 10>>::value << std::endl;
+	std::cout << count_occurrences<1, repeat_t<2, 10>>::value << std::endl;
 }
 
 //template <typename arr, int length> using take = static_list<>;

@@ -50,8 +50,8 @@ public:
 	{
 		return x.impl != y.impl;
 	}
-	void           swap(levelorder_vector& x) { impl.swap(x.impl); }
-	friend void    swap(levelorder_vector& x, levelorder_vector& y) { x.swap(y); }
+	void           swap(levelorder_vector& x) noexcept(std::declval<vector>().swap(declvar(std::declval<vector>()))) { impl.swap(x.impl); }
+	friend void    swap(levelorder_vector& x, levelorder_vector& y) noexcept(x.swap(y)) { x.swap(y); }
 	size_type      size()const { return impl.size(); }
 	size_type      max_size()const { return impl.max_size(); }
 	bool           empty()const { return impl.empty(); }
@@ -117,8 +117,6 @@ public:
 		std::vector<unsigned int> aux(first, last);
 		std::sort(aux.begin(), aux.end());
 		if (aux.size() > 0) {
-			size_t full_chunk_levels = 0;
-
 			size_t level_size = 1;
 			size_t full_block_count = 0;
 			size_t remaining_items = aux.size();
@@ -128,7 +126,7 @@ public:
 				full_block_count += level_size;
 				level_size *= 16;
 			}
-			auto nonfull_block_count = std::min(level_size, remaining_items);
+			const auto nonfull_block_count = std::min(level_size, remaining_items);
 			data.resize(full_block_count + nonfull_block_count);
 			insert(0, 0, aux.size(), aux.begin());
 		}
@@ -141,7 +139,7 @@ public:
 		while (chunk_index < data.size()) {
 			const chunk &current_chunk = data[chunk_index];
 			size_t j = 0;
-			size_t n = std::min(15, current_chunk.nodes);
+			const size_t n = std::min(15, current_chunk.nodes);
 
 			while (j < n) {
 				if (current_chunk.data[j] < x) {
@@ -165,9 +163,9 @@ private:
 			{
 				data[chunk_index].nodes = n;
 			}
-			size_t h = root(n);
+			const size_t h = root(n);
 			data[chunk_index].data[i] = first[h];
-			int new_i = 2 * i + 1;
+			const size_t new_i = 2 * i + 1;
 			if (new_i < 15) {
 				insert(chunk_index, new_i, h, first);
 				insert(chunk_index, new_i + 1, n - h - 1, first + h + 1);
@@ -180,7 +178,7 @@ private:
 		}
 	}
 
-	size_t root(size_t n)
+	size_t root(size_t n) const
 	{
 		if (n <= 1) return 0;
 		size_t i = 2;

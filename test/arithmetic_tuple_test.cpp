@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-#include <pan/arithmetic_tuple.hpp>>
+#include <pan/arithmetic_tuple.hpp>
 #include <pan/base.hpp>
 #include <pan/imaginary.hpp>
 

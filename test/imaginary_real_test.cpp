@@ -231,13 +231,13 @@ TEST(ImaginaryReal, Subtraction)
 {
 	auto xdImaginary = 50.0_i;
 	auto xdReal = 27.0;
-	std::complex<double> xdResult{ -27.0, 50.0 };
+	const std::complex<double> xdResult{ -27.0, 50.0 };
 	auto xfImaginary = 50.0_fi;
 	auto xfReal = 27.0f;
-	std::complex<float> xfResult{ -27.0f, 50.0f };
+	const std::complex<float> xfResult{ -27.0f, 50.0f };
 	imaginary<int> xiImaginary{ 50 };
 	auto xiReal = 27;
-	std::complex<int> xiResult{ -27, 50 };
+	const std::complex<int> xiResult{ -27, 50 };
 
 	// same type
 	EXPECT_EQ(xdImaginary - xdReal, xdResult);
@@ -258,13 +258,13 @@ TEST(ImaginaryReal, Multiplication)
 {
 	auto xdImaginary = 50.0_i;
 	auto xdReal = 25.0;
-	auto xdResult = 1250.0_i;
+	const auto xdResult = 1250.0_i;
 	auto xfImaginary = 50.0_fi;
 	auto xfReal = 25.0f;
-	auto xfResult = 1250.0_fi;
+	const auto xfResult = 1250.0_fi;
 	imaginary<int> xiImaginary{ 50 };
 	auto xiReal = 25;
-	imaginary<int> xiResult{ 1250 };
+	const imaginary<int> xiResult{ 1250 };
 
 	// same type
 	EXPECT_EQ(xdImaginary * xdReal, xdResult);
@@ -290,16 +290,16 @@ TEST(ImaginaryReal, Division)
 {
 	auto xdImaginary = 50.0_i;
 	auto xdReal = 25.0;
-	auto xdResult1 = 2.0_i;
-	auto xdResult2 = -0.5_i;
+	const auto xdResult1 = 2.0_i;
+	const auto xdResult2 = -0.5_i;
 	auto xfImaginary = 50.0_fi;
 	auto xfReal = 25.0f;
-	auto xfResult1 = 2.0_fi;
-	auto xfResult2 = -0.5_fi;
+	const auto xfResult1 = 2.0_fi;
+	const auto xfResult2 = -0.5_fi;
 	imaginary<int> xiImaginary{ 50 };
 	auto xiReal = 25;
-	imaginary<int> xiResult1{ 2 };
-	imaginary<int> xiResult2{ 0 };
+	const imaginary<int> xiResult1{ 2 };
+	const imaginary<int> xiResult2{ 0 };
 
 	// same type
 	EXPECT_EQ(xdImaginary / xdReal, xdResult1);
@@ -318,7 +318,7 @@ TEST(ImaginaryReal, Division)
     EXPECT_EQ(xdImaginary / xiReal, xiResult1);
     EXPECT_EQ(xiImaginary / xdReal, xiResult1);
 
-    // 0.5 is not representable in int, these shoule be NE
+    // 0.5 is not representable in int, these should be NE
     EXPECT_NE(xdReal / xiImaginary, xiResult2);
     EXPECT_NE(xiReal / xdImaginary, xiResult2);
 }

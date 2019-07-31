@@ -162,13 +162,13 @@ TEST(ImaginaryComplex, Addition)
 {
 	auto xdImaginary = 50.0_i;
 	std::complex<double> xdComplex{ 25.0, 27.0 };
-	std::complex<double> xdResult{ 25.0, 77.0 };
+	const std::complex<double> xdResult{ 25.0, 77.0 };
 	auto xfImaginary = 50.0_fi;
 	std::complex<float> xfComplex{ 25.0f, 27.0f };
-	std::complex<float> xfResult{ 25.0f, 77.0f };
+	const std::complex<float> xfResult{ 25.0f, 77.0f };
 	imaginary<int> xiImaginary{ 50 };
 	std::complex<int> xiComplex{ 25, 27 };
-	std::complex<int> xiResult{ 25, 77 };
+	const std::complex<int> xiResult{ 25, 77 };
 
 	// same type
 	EXPECT_EQ(xdImaginary + xdComplex, xdResult);
@@ -195,16 +195,16 @@ TEST(ImaginaryComplex, Subtraction)
 {
 	auto xdImaginary = 50.0_i;
 	std::complex<double> xdComplex{ 25.0, 27.0 };
-	std::complex<double> xdResult1{ -25.0, 23.0 };
-	std::complex<double> xdResult2{ 25.0, -23.0 };
+	const std::complex<double> xdResult1{ -25.0, 23.0 };
+	const std::complex<double> xdResult2{ 25.0, -23.0 };
 	auto xfImaginary = 50.0_fi;
 	std::complex<float> xfComplex{ 25.0f, 27.0f };
-	std::complex<float> xfResult1{ -25.0f, 23.0f };
-	std::complex<float> xfResult2{ 25.0f, -23.0f };
+	const std::complex<float> xfResult1{ -25.0f, 23.0f };
+	const std::complex<float> xfResult2{ 25.0f, -23.0f };
 	imaginary<int> xiImaginary{ 50 };
 	std::complex<int> xiComplex{ 25, 27 };
-	std::complex<int> xiResult1{ -25, 23 };
-	std::complex<int> xiResult2{ 25, -23 };
+	const std::complex<int> xiResult1{ -25, 23 };
+	const std::complex<int> xiResult2{ 25, -23 };
 
 	// same type
 	EXPECT_EQ(xdImaginary - xdComplex, xdResult1);
@@ -231,13 +231,13 @@ TEST(ImaginaryComplex, Multiplication)
 {
 	auto xdImaginary = 50.0_i;
 	std::complex<double> xdComplex{ 25.0, 27.0 };
-	std::complex<double> xdResult{ -1350.0, 1250.0 };
+	const std::complex<double> xdResult{ -1350.0, 1250.0 };
 	auto xfImaginary = 50.0_fi;
 	std::complex<float> xfComplex{ 25.0f, 27.0f };
-	std::complex<float> xfResult{ -1350.0f, 1250.0f };
+	const std::complex<float> xfResult{ -1350.0f, 1250.0f };
 	imaginary<int> xiImaginary{ 50 };
 	std::complex<int> xiComplex{ 25, 27 };
-	std::complex<int> xiResult{ -1350, 1250 };
+	const std::complex<int> xiResult{ -1350, 1250 };
 
 	// same type
 	EXPECT_EQ(xdImaginary * xdComplex, xdResult);
@@ -264,16 +264,16 @@ TEST(ImaginaryComplex, Division)
 {
 	auto xdImaginary = 52.0_i;
 	std::complex<double> xdComplex{ 26.0, 13.0 };
-	std::complex<double> xdResult1{ 0.8, 1.6 };
-	std::complex<double> xdResult2{ 0.25, -0.5 };
+	const std::complex<double> xdResult1{ 0.8, 1.6 };
+	const std::complex<double> xdResult2{ 0.25, -0.5 };
 	auto xfImaginary = 52.0_fi;
 	std::complex<float> xfComplex{ 26.0f, 13.0f };
-	std::complex<float> xfResult1{ 0.8f, 1.6f };
-	std::complex<float> xfResult2{ 0.25f, -0.5f };
+	const std::complex<float> xfResult1{ 0.8f, 1.6f };
+	const std::complex<float> xfResult2{ 0.25f, -0.5f };
 	imaginary<int> xiImaginary{ 52 };
 	std::complex<int> xiComplex{ 26, 13 };
-	std::complex<int> xiResult1{ 0, 1 };
-	std::complex<int> xiResult2{ 0, 0 };
+	const std::complex<int> xiResult1{ 0, 1 };
+	const std::complex<int> xiResult2{ 0, 0 };
 
 	// same type
 	EXPECT_EQ(xdImaginary / xdComplex, xdResult1);

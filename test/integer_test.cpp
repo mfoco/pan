@@ -41,7 +41,7 @@ TEST(Integer, Construction)
 TEST(Integer, CopyConstruction)
 {
     integer<false, 10> u10_10s1{ 10 };
-    auto u10_10s2 = u10_10s1;
+	const auto u10_10s2 = u10_10s1;
     ASSERT_EQ(u10_10s1.value(), u10_10s2.value());
 }
 
@@ -56,17 +56,19 @@ TEST(Integer, MoveConstruction)
 TEST(Integer, ConvertingConstruction)
 {
     integer<false, 10> u10_10s1{ 10 };
-    integer<false, 20> u20_10s1 = u10_10s1;
+	const integer<false, 20> u20_10s1 = u10_10s1;
     ASSERT_EQ(u10_10s1.value(), u20_10s1.value());
 
-    integer<true, 11> s11_10s1 = u10_10s1;
+	const integer<true, 11> s11_10s1 = u10_10s1;
     ASSERT_EQ(u10_10s1.value(), s11_10s1.value());
 }
 
 TEST(Integer, CopyAssignment)
 {
     integer<false, 10> u10_10s1{ 10 };
-    integer<false, 10>  u10_10s2;
+	// ReSharper disable CppJoinDeclarationAndAssignment
+	integer<false, 10>  u10_10s2;
+	// ReSharper restore CppJoinDeclarationAndAssignment
     u10_10s2 = u10_10s1;
     ASSERT_EQ(u10_10s1.value(), u10_10s2.value());
 }
@@ -74,22 +76,26 @@ TEST(Integer, CopyAssignment)
 TEST(Integer, MoveAssignment)
 {
     integer<false, 10> u10_10s1{ 10 };
-    integer<false, 10> u10_10s2;
-    u10_10s2 = std::move(u10_10s1);
+	// ReSharper disable CppJoinDeclarationAndAssignment
+	const integer<false, 10> u10_10s2;
+	// ReSharper restore CppJoinDeclarationAndAssignment
+	u10_10s2 = std::move(u10_10s1);
     ASSERT_EQ(u10_10s2.value(), 10);
 }
 
 TEST(Integer, ConvertingAssignment)
 {
-    integer<false, 10> u10_10s1{ 10 };
+    const integer<false, 10> u10_10s1{ 10 };
 
-    integer<true, 10> s10_10s1;
+	// ReSharper disable CppJoinDeclarationAndAssignment
+	integer<true, 10> s10_10s1;
     s10_10s1 = +u10_10s1;
-    ASSERT_EQ(u10_10s1.value(), u10_10s1.value());
+	integer<true, 11> s11_10s1;
+	s11_10s1 = u10_10s1;
+	// ReSharper restore CppJoinDeclarationAndAssignment
 
-    integer<true, 11> s11_10s1;
-    s11_10s1 = u10_10s1;
-    ASSERT_EQ(u10_10s1.value(), s11_10s1.value());
+	ASSERT_EQ(s10_10s1.value(), u10_10s1.value());
+	ASSERT_EQ(s10_10s1.value(), s11_10s1.value());
 }
 
 TEST(Integer, Literals)
@@ -99,7 +105,7 @@ TEST(Integer, Literals)
 
 TEST(Integer, Unary)
 {
-    integer<false, 10> u10_10s1{ 10 };
+	const integer<false, 10> u10_10s1{ 10 };
     integer<false, 20> u20_10s1 = +u10_10s1;
     integer<true, 10> s10_m10s1{ -10 };
     integer<true, 20> s20_m10s1 = -s10_m10s1;

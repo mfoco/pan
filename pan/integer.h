@@ -72,13 +72,13 @@ namespace pan
             exchange(_value, other._value);
         }
 
-        /*constexpr*/ this_type & operator = (const this_type &other)
+        constexpr this_type & operator = (const this_type &other)
         {
             _value = other._value;
             return *this;
         }
 
-        /*constexpr*/ this_type & operator = (this_type &&other)
+        constexpr this_type & operator = (this_type &&other) noexcept
         {
             using std::move;
             _value = move(other._value);
@@ -86,7 +86,7 @@ namespace pan
         }
 
         template<bool FROM_SIGNED, int FROM_BITS, typename = std::enable_if_t<((SIGNED == FROM_SIGNED) && (FROM_BITS <= BITS) || (SIGNED && (FROM_BITS < BITS)))>>
-        /*constexpr*/ this_type & operator = (const integer<FROM_SIGNED, FROM_BITS> &other)
+        constexpr this_type & operator = (const integer<FROM_SIGNED, FROM_BITS> &other)
         {
             _value = other.value();
             return *this;

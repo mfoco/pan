@@ -3,6 +3,7 @@
 #define _IMAGINARY_H_
 
 #include "base.hpp"
+#include <complex>
 
 namespace pan
 {
@@ -16,7 +17,7 @@ namespace pan
     template<typename T, int N> struct prod_tag<imaginary_base<T, N>, T> { using ReturnType = imaginary_base<T, N>; constexpr static int S = 1; };
     template<typename T, int N> struct prod_tag<T, imaginary_base<T, N>> { using ReturnType = imaginary_base<T, N>; constexpr static int S = 1; };
 
-    template<typename T, int N, int M> struct prod_tag<imaginary_base<T, N>, imaginary_base<T, M>, typename std::enable_if_t<(N > M)>> { using ReturnType = typename prod_tag<imaginary_base<T, M>, imaginary_base<T, N>>::ReturnType; constexpr static int S = -prod_tag<imaginary_base<T, M>, imaginary_base<T, N>>::S; };
+    template<typename T, int N, int M> struct prod_tag<imaginary_base<T, N>, imaginary_base<T, M>, std::enable_if_t<(N > M)>> { using ReturnType = typename prod_tag<imaginary_base<T, M>, imaginary_base<T, N>>::ReturnType; constexpr static int S = -prod_tag<imaginary_base<T, M>, imaginary_base<T, N>>::S; };
 
     template<typename T> struct prod_tag<imaginary_base<T, 0>, imaginary_base<T, 1>> { using ReturnType = imaginary_base<T, 2>; constexpr static int S = +1; };
     template<typename T> struct prod_tag<imaginary_base<T, 0>, imaginary_base<T, 2>> { using ReturnType = imaginary_base<T, 1>; constexpr static int S = -1; };
@@ -45,17 +46,17 @@ namespace pan
 
     template<typename T> struct prod_tag<imaginary_base<T, 5>, imaginary_base<T, 6>> { using ReturnType = imaginary_base<T, 0>; constexpr static int S = -1; };
 
-    inline constexpr imaginary<float> operator ""_fi(long double f)
+    constexpr imaginary<float> operator ""_fi(long double f)
     {
         return imaginary<float>(static_cast<float>(f));
     }
 
-    inline constexpr imaginary<double> operator ""_i(long double f)
+    constexpr imaginary<double> operator ""_i(long double f)
     {
         return imaginary<double>(static_cast<double>(f));
     }
 
-    inline constexpr imaginary<long double> operator ""_li(long double f)
+    constexpr imaginary<long double> operator ""_li(long double f)
     {
         return imaginary<long double>(f);
     }
@@ -125,7 +126,9 @@ namespace pan
     }
 
     template <typename T, typename U> constexpr auto operator / (const imaginary<T> & a, const std::complex<U> & b) -> std::enable_if_t<std::is_assignable_v<T&, U> || std::is_assignable_v<U&, T>, std::complex<div_result_t<T, U>>> {
-        return { a.value() * b.imag() / (b.real() * b.real() + b.imag() * b.imag()), a.value() * b.real() / (b.real() * b.real() + b.imag() * b.imag()) };
+		using RT = div_result_t<T, U>;
+		RT norm = (RT(b.real()) * b.real() + b.imag() * b.imag());
+        return { RT(a.value()) * b.imag() / norm, RT(a.value()) * b.real() / norm };
     }
 }
 

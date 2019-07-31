@@ -4,7 +4,7 @@
 #include <type_traits>
 
 namespace pan::opt {
-	template<typename T, typename COND = void> struct opt {
+	template<typename T, typename Cond = void> struct opt {
 		//using type = T;
 	};
 
@@ -136,7 +136,7 @@ namespace pan::opt {
 
 	/* Recursive Optimization */
 
-	template<typename T, typename TC = void> struct recursive_opt
+	template<typename T, typename Cond = void> struct recursive_opt
 	{
 		using type = T;
 	};

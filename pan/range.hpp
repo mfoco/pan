@@ -5,7 +5,6 @@
 #include <limits>
 #include <type_traits>
 #include "tag.h"
-#include "integer.h"
 
 namespace pan {
     // recursive case: check using numeric_limits

@@ -11,17 +11,17 @@ namespace pan {
     template<typename T, int N> struct prod_tag<epsilon<T, N>, T> { using ReturnType = epsilon<T, N>; constexpr static int S = 1; };
     template<typename T, int N> struct prod_tag<T, epsilon<T, N>> { using ReturnType = epsilon<T, N>; constexpr static int S = 1; };
 
-    inline constexpr epsilon<float> operator ""_feps(long double f)
+    constexpr epsilon<float> operator ""_feps(long double f)
     {
         return epsilon<float>(static_cast<float>(f));
     }
 
-    inline constexpr epsilon<double> operator ""_eps(long double f)
+    constexpr epsilon<double> operator ""_eps(long double f)
     {
         return epsilon<double>(static_cast<double>(f));
     }
 
-    inline constexpr epsilon<long double> operator ""_leps(long double f)
+    constexpr epsilon<long double> operator ""_leps(long double f)
     {
         return epsilon<long double>(f);
     }
