@@ -1,71 +1,76 @@
 
-#include <gtest/gtest.h>
+
+#define CATCH_CONFIG_MAIN
+
+#include <catch2/catch.hpp>
 #include <pan/base.hpp>
 #include <pan/imaginary.hpp>
 #include <pan/dual.hpp>
 
 using namespace pan;
 
-TEST(Base, Construction)
+TEMPLATE_TEST_CASE("Base", "[template]", int, float, double)
 {
-    constexpr float r0{ 0 };
-    constexpr float r1{ 1 };
-    constexpr imaginary<float> i0{ 0 };
-    constexpr imaginary<float> i1{ 1 };
-    constexpr epsilon<float> e0{ 0 };
-    constexpr epsilon<float> e1{ 1 };
+    SECTION("Construction")
+    {
+        constexpr TestType r0{0};
+        constexpr TestType r1{1};
+        constexpr imaginary<TestType> i0{0};
+        constexpr imaginary<TestType> i1{1};
+        constexpr epsilon<TestType> e0{0};
+        constexpr epsilon<TestType> e1{1};
 
-    EXPECT_EQ(r0, 0);
-    EXPECT_EQ(r1, 1);
-    EXPECT_EQ(i0.value(), 0);
-    EXPECT_EQ(i1.value(), 1);
-    EXPECT_EQ(e0.value(), 0);
-    EXPECT_EQ(e1.value(), 1);
-}
+        REQUIRE(r0 == 0);
+        REQUIRE(r1 == 1);
+        REQUIRE(i0.value() == 0);
+        REQUIRE(i1.value() == 1);
+        REQUIRE(e0.value() == 0);
+        REQUIRE(e1.value() == 1);
+    }
 
-TEST(Base, Multiplication)
-{
-    constexpr float r0{ 0 };
-    constexpr float r1{ 1 };
-    constexpr float rm1{ -1 };
-    constexpr imaginary<float> i0{ 0 };
-    constexpr imaginary<float> i1{ 1 };
-    constexpr epsilon<float> e0{ 0 };
-    constexpr epsilon<float> e1{ 1 };
+    SECTION("Multiplication")
+    {
+        constexpr TestType r0{0};
+        constexpr TestType r1{1};
+        constexpr TestType rm1{-1};
+        constexpr imaginary<TestType> i0{0};
+        constexpr imaginary<TestType> i1{1};
+        constexpr epsilon<TestType> e0{0};
+        constexpr epsilon<TestType> e1{1};
 
-    EXPECT_EQ(r0 * r0, r0);
-    EXPECT_EQ(r1 * r0, r0);
-    EXPECT_EQ(r0 * r1, r0);
-    EXPECT_EQ(r1 * r1, r1);
+        REQUIRE(r0 * r0 == r0);
+        REQUIRE(r1 * r0 == r0);
+        REQUIRE(r0 * r1 == r0);
+        REQUIRE(r1 * r1 == r1);
 
-    EXPECT_EQ(i0 * i0, r0);
-    EXPECT_EQ(i0 * i1, r0);
-    EXPECT_EQ(i1 * i0, r0);
-    EXPECT_EQ(i1 * i1, rm1);
+        REQUIRE(i0 * i0 == r0);
+        REQUIRE(i0 * i1 == r0);
+        REQUIRE(i1 * i0 == r0);
+        REQUIRE(i1 * i1 == rm1);
 
-    EXPECT_EQ(e0 * e0, r0);
-    EXPECT_EQ(e0 * e1, r0);
-    EXPECT_EQ(e1 * e0, r0);
-    EXPECT_EQ(e1 * e1, r0);
+        REQUIRE(e0 * e0 == r0);
+        REQUIRE(e0 * e1 == r0);
+        REQUIRE(e1 * e0 == r0);
+        REQUIRE(e1 * e1 == r0);
 
-    EXPECT_EQ(r0 * i0, i0);
-    EXPECT_EQ(r1 * i0, i0);
-    EXPECT_EQ(r0 * i1, i0);
-    EXPECT_EQ(r1 * i1, i1);
+        REQUIRE(r0 * i0 == i0);
+        REQUIRE(r1 * i0 == i0);
+        REQUIRE(r0 * i1 == i0);
+        REQUIRE(r1 * i1 == i1);
 
-    EXPECT_EQ(i0 * r0, i0);
-    EXPECT_EQ(i1 * r0, i0);
-    EXPECT_EQ(i0 * r1, i0);
-    EXPECT_EQ(i1 * r1, i1);
+        REQUIRE(i0 * r0 == i0);
+        REQUIRE(i1 * r0 == i0);
+        REQUIRE(i0 * r1 == i0);
+        REQUIRE(i1 * r1 == i1);
 
-    EXPECT_EQ(r0 * e0, e0);
-    EXPECT_EQ(r0 * e1, e0);
-    EXPECT_EQ(r1 * e0, e0);
-    EXPECT_EQ(r1 * e1, e1);
+        REQUIRE(r0 * e0 == e0);
+        REQUIRE(r0 * e1 == e0);
+        REQUIRE(r1 * e0 == e0);
+        REQUIRE(r1 * e1 == e1);
 
-    EXPECT_EQ(e0 * r0, e0);
-    EXPECT_EQ(e0 * r1, e0);
-    EXPECT_EQ(e1 * r0, e0);
-    EXPECT_EQ(e1 * r1, e1);
-
+        REQUIRE(e0 * r0 == e0);
+        REQUIRE(e0 * r1 == e0);
+        REQUIRE(e1 * r0 == e0);
+        REQUIRE(e1 * r1 == e1);
+    }
 }

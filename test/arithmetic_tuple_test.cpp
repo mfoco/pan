@@ -1,12 +1,17 @@
 
-#include <gtest/gtest.h>
+#define CATCH_CONFIG_MAIN
+
+#include <catch2/catch.hpp>
 #include <pan/arithmetic_tuple.hpp>
 #include <pan/base.hpp>
 #include <pan/imaginary.hpp>
 
 using namespace pan;
 
-TEST(ArithmeticTuple, Construction)
+TEST_CASE("ArithmeticTuple")
 {
-	arithmetic_tuple<float, imaginary<float>> at0;
+	SECTION("Construction")
+	{
+		arithmetic_tuple<float, imaginary<float>> at0;
+	}
 }

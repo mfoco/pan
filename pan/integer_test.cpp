@@ -4,7 +4,7 @@
 
 using namespace pan;
 
-TEST(Integer, DefaultConstruction)
+TEST_CASE("Integer, DefaultConstruction)
 {
     integer<false, 10> u10{};
     integer<true, 10> s10{};
@@ -25,7 +25,7 @@ TEST(Integer, DefaultConstruction)
     ASSERT_EQ(s63.value(), 0);
 }
 
-TEST(Integer, Construction)
+TEST_CASE("Integer, Construction)
 {
     constexpr integer<false, 10> u10_10s{ 10 };
     constexpr integer<true, 10> s10_10s{ 10 };
@@ -38,14 +38,14 @@ TEST(Integer, Construction)
     ASSERT_EQ(s10_10s.value(), s10_10u.value());
 }
 
-TEST(Integer, CopyConstruction)
+TEST_CASE("Integer, CopyConstruction)
 {
     integer<false, 10> u10_10s1{ 10 };
     auto u10_10s2 = u10_10s1;
     ASSERT_EQ(u10_10s1.value(), u10_10s2.value());
 }
 
-TEST(Integer, MoveConstruction)
+TEST_CASE("Integer, MoveConstruction)
 {
     integer<false, 10> u10_10s1{ 10 };
     integer<false, 10> u10_10s2(std::move(u10_10s1));
@@ -53,7 +53,7 @@ TEST(Integer, MoveConstruction)
     ASSERT_EQ(u10_10s2.value(), 10);
 }
 
-TEST(Integer, ConvertingConstruction)
+TEST_CASE("Integer, ConvertingConstruction)
 {
     integer<false, 10> u10_10s1{ 10 };
     integer<false, 20> u20_10s1 = u10_10s1;
@@ -63,7 +63,7 @@ TEST(Integer, ConvertingConstruction)
     ASSERT_EQ(u10_10s1.value(), s11_10s1.value());
 }
 
-TEST(Integer, CopyAssignment)
+TEST_CASE("Integer, CopyAssignment)
 {
     integer<false, 10> u10_10s1{ 10 };
     integer<false, 10>  u10_10s2;
@@ -71,7 +71,7 @@ TEST(Integer, CopyAssignment)
     ASSERT_EQ(u10_10s1.value(), u10_10s2.value());
 }
 
-TEST(Integer, MoveAssignment)
+TEST_CASE("Integer, MoveAssignment)
 {
     integer<false, 10> u10_10s1{ 10 };
     integer<false, 10> u10_10s2;
@@ -79,7 +79,7 @@ TEST(Integer, MoveAssignment)
     ASSERT_EQ(u10_10s2.value(), 10);
 }
 
-TEST(Integer, ConvertingAssignment)
+TEST_CASE("Integer, ConvertingAssignment)
 {
     integer<false, 10> u10_10s1{ 10 };
 
@@ -92,12 +92,12 @@ TEST(Integer, ConvertingAssignment)
     ASSERT_EQ(u10_10s1.value(), s11_10s1.value());
 }
 
-TEST(Integer, Literals)
+TEST_CASE("Integer, Literals)
 {
     FAIL();
 }
 
-TEST(Integer, Unary)
+TEST_CASE("Integer, Unary)
 {
     integer<false, 10> u10_10s1{ 10 };
     integer<false, 20> u20_10s1 = +u10_10s1;
@@ -108,32 +108,32 @@ TEST(Integer, Unary)
     u20_10s1 = u10_10s1;
 }
 
-TEST(Integer, AutoAssignment)
+TEST_CASE("Integer, AutoAssignment)
 {
     FAIL();
 }
 
-TEST(Integer, Comparison)
+TEST_CASE("Integer, Comparison)
 {
     FAIL();
 }
 
-TEST(Integer, Addition)
+TEST_CASE("Integer, Addition)
 {
     FAIL();
 }
 
-TEST(Integer, Subtraction)
+TEST_CASE("Integer, Subtraction)
 {
     FAIL();
 }
 
-TEST(Integer, Multiplication)
+TEST_CASE("Integer, Multiplication)
 {
     FAIL();
 }
 
-TEST(Integer, Division)
+TEST_CASE("Integer, Division)
 {
     FAIL();
 }
