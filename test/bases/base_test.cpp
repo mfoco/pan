@@ -1,7 +1,4 @@
 
-
-#define CATCH_CONFIG_MAIN
-
 #include <catch2/catch.hpp>
 #include <pan/base.hpp>
 #include <pan/imaginary.hpp>
