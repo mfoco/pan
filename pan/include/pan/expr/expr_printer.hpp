@@ -7,7 +7,8 @@
 
 namespace pan::expr
 {
-	template<int N> [[nodiscard]] std::string to_string(const var<N>& v) {
+	template<int N> [[nodiscard]] std::string to_string(const var<N>& v)
+	{
 		return std::string("x") + std::to_string(N);
 	}
 

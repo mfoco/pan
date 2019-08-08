@@ -4,7 +4,8 @@
 #include <tuple>
 #include "base.hpp"
 
-namespace pan {
+namespace pan::bases
+{
     template<typename ...T> struct arithmetic_tuple;
 
     template<typename ...T> auto make_arithmetic_tuple(T... t) { return arithmetic_tuple<T...>(t...); }

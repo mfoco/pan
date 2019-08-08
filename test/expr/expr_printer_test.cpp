@@ -1,8 +1,8 @@
 
 #include <catch2/catch.hpp>
 
-#include <pan/expr.hpp>
-#include <pan/expr_printer.hpp>
+#include <pan/expr/expr.hpp>
+#include <pan/expr/expr_printer.hpp>
 
 #include <array>
 

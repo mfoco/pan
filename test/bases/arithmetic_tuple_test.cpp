@@ -1,10 +1,11 @@
 
 #include <catch2/catch.hpp>
-#include <pan/arithmetic_tuple.hpp>
-#include <pan/base.hpp>
-#include <pan/imaginary.hpp>
 
-using namespace pan;
+#include <pan/bases/arithmetic_tuple.hpp>
+#include <pan/bases/base.hpp>
+#include <pan/bases/imaginary.hpp>
+
+using namespace pan::bases;
 
 TEST_CASE("ArithmeticTuple")
 {

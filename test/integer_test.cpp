@@ -1,6 +1,7 @@
 
-#include <pan/integer.h>
-#include <gtest/gtest.h>
+#include <catch2/catch.hpp>
+
+#include <pan/integer/integer.hpp>
 
 using namespace pan;
 

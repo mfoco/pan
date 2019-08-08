@@ -2,12 +2,12 @@
 #ifndef _BASE_
 #define _BASE_
 
-#include <cmath>
-#include <ostream>
+#include <type_traits>
 
-namespace pan
+namespace pan::bases
 {
-    namespace {
+    namespace
+    {
         template <typename T, typename U> using sum_result_t = decltype(std::declval<T>() + std::declval<U>());
         template <typename T, typename U> using sub_result_t = decltype(std::declval<T>() - std::declval<U>());
         template <typename T, typename U> using mul_result_t = decltype(std::declval<T>() * std::declval<U>());
@@ -21,10 +21,12 @@ namespace pan
     template <typename T, typename _Tag> class base;
 
     template<int N> struct Real {};
-    template <typename T, int N = 0> struct base_real {
+    template <typename T, int N = 0> struct base_real
+    {
         using type = base<T, Real<N>>;
     };
-    template <typename T> struct base_real<T, 0> {
+    template <typename T> struct base_real<T, 0>
+    {
         using type = T;
     };
 
@@ -55,7 +57,8 @@ namespace pan
         template<typename U> static cast_underlying_type<U> cast_underlying(T t) { return { t }; }
     };
 
-    template<typename U, typename T> auto underlying_cast(T& t) {// -> typename type_tag<T>::cast_underlying_type<U> {
+    template<typename U, typename T> auto underlying_cast(T& t) // -> typename type_tag<T>::cast_underlying_type<U>
+    {
         return type_tag<T>::cast_underlying_type(t);
     }
 

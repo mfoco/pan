@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <algorithm>
 #include <type_traits>
-#include "tag.h"
+#include "tag.hp"
 
 namespace pan
 {
@@ -34,7 +34,8 @@ namespace pan
         // default constructor
         constexpr integer() noexcept : _value() {}
 
-        template<typename U> class has_smaller_range {
+        template<typename U> class has_smaller_range
+        {
             enum {
                 value = (
                 (sign == std::numeric_limits<U>::is_signed) && (digits <= std::numeric_limits<U>::digits)) ||

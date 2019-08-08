@@ -4,7 +4,8 @@
 
 #include "base.hpp"
 
-namespace pan {
+namespace pan::bases
+{
     template <int N> struct Epsilon;
     template <typename T, int N = 0> using epsilon = base<T, Epsilon<N>>;
     template<typename T, int N> struct prod_tag<epsilon<T, N>, epsilon<T, N>> { using ReturnType = T; constexpr static int S = 0; };

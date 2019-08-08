@@ -1,17 +1,15 @@
 
 #include <catch2/catch.hpp>
 
-#include <pan/expr.hpp>
-#include <pan/diff.hpp>
-#include <pan/opt.hpp>
-#include <pan/expr_printer.hpp>
+#include <pan/expr/expr.hpp>
+#include <pan/expr/diff.hpp>
+#include <pan/expr/opt.hpp>
+#include <pan/expr/expr_printer.hpp>
 
 #include <array>
 
 using namespace std;
-using namespace pan::diff;
 using namespace pan::expr;
-using namespace pan::opt;
 
 TEST_CASE("SymbolicDifferentiation") 
 {

@@ -6,14 +6,16 @@
 #include <type_traits>
 #include "tag.h"
 
-namespace pan {
+namespace pan
+{
     // recursive case: check using numeric_limits
 
     struct unspecified_range {};
     struct unspecified_signed_range {};
     struct unbounded {};
 
-    namespace {
+    namespace
+    {
         // modified code from http://stackoverflow.com/questions/31334291/select-an-integer-type-based-on-template-integer-parameter, response by Barry
         template <uint64_t MAX, typename... > struct bounded_unsigned;
 

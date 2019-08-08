@@ -1,10 +1,11 @@
 
 #include <catch2/catch.hpp>
-#include <pan/base.hpp>
-#include <pan/imaginary.hpp>
-#include <pan/dual.hpp>
 
-using namespace pan;
+#include <pan/bases/base.hpp>
+#include <pan/bases/imaginary.hpp>
+#include <pan/bases/dual.hpp>
+
+using namespace pan::bases;
 
 TEMPLATE_TEST_CASE("Base", "[template]", int, float, double)
 {

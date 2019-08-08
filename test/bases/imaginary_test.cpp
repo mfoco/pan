@@ -1,8 +1,9 @@
 
 #include <catch2/catch.hpp>
-#include <pan/imaginary.hpp>
 
-using namespace pan;
+#include <pan/bases/imaginary.hpp>
+
+using namespace pan::bases;
 
 TEMPLATE_TEST_CASE("Imaginary", "[template]", int, float, double)
 {

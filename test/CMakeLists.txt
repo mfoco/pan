@@ -12,14 +12,9 @@ FetchContent_MakeAvailable(catch2)
 
 macro(package_add_test TESTNAME)
     add_executable(${TESTNAME} ${ARGN})
-    target_link_libraries(${TESTNAME} Catch2)
+    target_link_libraries(${TESTNAME} PUBLIC Catch2)
     add_test(NAME ${TESTNAME} COMMAND ${TESTNAME})
-    set_target_properties(${TESTNAME}
-        PROPERTIES 
-            FOLDER tests
-            CXX_STANDARD_REQUIRED ON
-            CXX_STANDARD 17)
 endmacro()
 
 add_subdirectory(bases)
-add_subdirectory(diff)
+add_subdirectory(expr)

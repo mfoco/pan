@@ -1,7 +1,7 @@
 
 #include <catch2/catch.hpp>
 
-#include <pan/expr.hpp>
+#include <pan/expr/expr.hpp>
 
 #include <array>
 

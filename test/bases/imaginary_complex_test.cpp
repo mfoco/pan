@@ -1,9 +1,11 @@
 
 #include <catch2/catch.hpp>
-#include <pan/imaginary.hpp>
+
+#include <pan/bases/imaginary.hpp>
+
 #include <utility>
 
-using namespace pan;
+using namespace pan::bases;
 
 TEMPLATE_PRODUCT_TEST_CASE("ImaginaryComplex", "[templated]", std::tuple, ((int, int), (int, float), (int, double), (float, int), (float, float), (float, double), (double, int), (double, float), (double, double)))
 {
