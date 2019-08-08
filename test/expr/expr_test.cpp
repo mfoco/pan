@@ -2,6 +2,7 @@
 #include <catch2/catch.hpp>
 
 #include <pan/expr/expr.hpp>
+#include <pan/expr/evaluate.hpp>
 
 #include <array>
 

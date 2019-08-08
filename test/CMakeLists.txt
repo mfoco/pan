@@ -18,3 +18,4 @@ endmacro()
 
 add_subdirectory(bases)
 add_subdirectory(expr)
+add_subdirectory(forward_diff)

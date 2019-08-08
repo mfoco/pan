@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string>
-//#include <type_traits>
-
 #include "expr.hpp"
+
+#include <string>
 
 namespace pan::expr
 {
@@ -11,11 +10,6 @@ namespace pan::expr
 	{
 		return std::string("x") + std::to_string(N);
 	}
-
-	//template<typename T, T N> [[nodiscard]] std::string to_string(const std::integral_constant<T, N>& v) {
-	//	using std::to_string;
-	//	return to_string(N);
-	//}
 
 	template<typename L, typename R> [[nodiscard]] std::string to_string(const sumOp<L, R>& op)
 	{

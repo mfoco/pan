@@ -5,69 +5,121 @@
 
 using namespace pan::bases;
 
-TEMPLATE_TEST_CASE("Imaginary", "[template]", int, float, double, long double)
+TEMPLATE_TEST_CASE("Imaginary", "[template]", int, float, double)
 {
 	SECTION("DefaultConstruction")
 	{
-		imaginary<TestType> x;
+		dual
+		dual<float> xf;
+		dual<double> xd;
+		dual<long double> xl;
+		dual<int> xi;
 
-		REQUIRE(x.value() == 0);
+		REQUIRE(xf.value() == 0.0f);
+		REQUIRE(xd.value() == 0.0);
+		REQUIRE(xl.value() == 0.0l);
+		REQUIRE(xi.value() == 0);
 	}
 
 	SECTION("Construction")
 	{
-		imaginary<TestType> x{50};
+		imaginary<float> xf{50.1f};
+		imaginary<double> xd{50.1};
+		imaginary<long double> xl{50.1l};
+		imaginary<int> xi{50};
 
-		REQUIRE(x.value() == 50);
+		REQUIRE(xf.value() == 50.1f);
+		REQUIRE(xd.value() == 50.1);
+		REQUIRE(xl.value() == 50.1l);
+		REQUIRE(xi.value() == 50);
 	}
 
 	SECTION("CopyConstruction")
 	{
-		imaginary<TestType> x{50};
+		imaginary<float> xf{50.1f};
+		imaginary<double> xd{50.1};
+		imaginary<long double> xl{50.1l};
+		imaginary<int> xi{50};
 
-		const imaginary<TestType> x2{x};
+		const imaginary<float> xf2{xf};
+		const imaginary<double> xd2{xd};
+		const imaginary<long double> xl2{xl};
+		const imaginary<int> xi2{xi};
 
-		REQUIRE(x.value() == x2.value());
+		REQUIRE(xf.value() == xf2.value());
+		REQUIRE(xd.value() == xd2.value());
+		REQUIRE(xl.value() == xl2.value());
+		REQUIRE(xi.value() == xi2.value());
 	}
 
 	SECTION("MoveConstruction")
 	{
-		imaginary<TestType> x{50};
+		imaginary<float> xf{50.1f};
+		imaginary<double> xd{50.1};
+		imaginary<long double> xl{50.1l};
+		imaginary<int> xi{50};
 
-		imaginary<TestType> x2{std::move(x)};
+		imaginary<float> xf2{std::move(xf)};
+		imaginary<double> xd2{std::move(xd)};
+		imaginary<long double> xl2{std::move(xl)};
+		imaginary<int> xi2{std::move(xi)};
 
-		REQUIRE(x2.value() == 50);
+		REQUIRE(xf2.value() == 50.1f);
+		REQUIRE(xd2.value() == 50.1);
+		REQUIRE(xl2.value() == 50.1l);
+		REQUIRE(xi2.value() == 50);
 	}
 
 	SECTION("CopyAssignment")
 	{
-		imaginary<TestType> x{50};
+		imaginary<float> xf{50.1f};
+		imaginary<double> xd{50.1};
+		imaginary<long double> xl{50.1l};
+		imaginary<int> xi{50};
 
 		// ReSharper disable CppJoinDeclarationAndAssignment
-		imaginary<TestType> x2;
+		imaginary<float> xf2;
+		imaginary<double> xd2;
+		imaginary<long double> xl2;
+		imaginary<int> xi2;
 		// ReSharper restore CppJoinDeclarationAndAssignment
 
-		x2 = x;
+		xf2 = xf;
+		xd2 = xd;
+		xl2 = xl;
+		xi2 = xi;
 
-		REQUIRE(x.value() == x2.value());
+		REQUIRE(xf.value() == xf2.value());
+		REQUIRE(xd.value() == xd2.value());
+		REQUIRE(xl.value() == xl2.value());
+		REQUIRE(xi.value() == xi2.value());
 	}
 
 	SECTION("MoveAssignment")
 	{
-		imaginary<TestType> x{50};
+		imaginary<float> xf{50.1f};
+		imaginary<double> xd{50.1};
+		imaginary<long double> xl{50.1l};
+		imaginary<int> xi{50};
 
 		// ReSharper disable CppJoinDeclarationAndAssignment
-		imaginary<TestType> x2;
+		imaginary<float> xf2;
+		imaginary<double> xd2;
+		imaginary<long double> xl2;
+		imaginary<int> xi2;
 		// ReSharper restore CppJoinDeclarationAndAssignment
 
-		x2 = std::move(x);
+		xf2 = std::move(xf);
+		xd2 = std::move(xd);
+		xl2 = std::move(xl);
+		xi2 = std::move(xi);
 
-		REQUIRE(x2.value() == 50);
+		REQUIRE(xf2.value() == 50.1f);
+		REQUIRE(xd2.value() == 50.1);
+		REQUIRE(xl2.value() == 50.1l);
+		REQUIRE(xi2.value() == 50);
 	}
-}
 
-TEST_CASE("Imaginary")
-{
 	SECTION("Literals")
 	{
 		auto xf = 50.1_fi;
@@ -321,4 +373,5 @@ TEST_CASE("Imaginary")
 		REQUIRE(xi1 / xd2 == xdResult1);
 		REQUIRE(xi2 / xd1 == xdResult2);
 	}
+
 }
