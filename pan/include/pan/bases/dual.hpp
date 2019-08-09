@@ -1,32 +1,11 @@
 
-#ifndef _DUAL_BASE_
-#define _DUAL_BASE_
+#pragma once
 
-#include "base.hpp"
+#include <cmath>
+#include "epsilon.hpp"
 
 namespace pan::bases
 {
-    template <int N> struct Epsilon;
-    template <typename T, int N = 0> using epsilon = base<T, Epsilon<N>>;
-    template<typename T, int N> struct prod_tag<epsilon<T, N>, epsilon<T, N>> { using ReturnType = T; constexpr static int S = 0; };
-    template<typename T, int N> struct prod_tag<epsilon<T, N>, T> { using ReturnType = epsilon<T, N>; constexpr static int S = 1; };
-    template<typename T, int N> struct prod_tag<T, epsilon<T, N>> { using ReturnType = epsilon<T, N>; constexpr static int S = 1; };
-
-    constexpr epsilon<float> operator ""_feps(long double f)
-    {
-        return epsilon<float>(static_cast<float>(f));
-    }
-
-    constexpr epsilon<double> operator ""_eps(long double f)
-    {
-        return epsilon<double>(static_cast<double>(f));
-    }
-
-    constexpr epsilon<long double> operator ""_leps(long double f)
-    {
-        return epsilon<long double>(f);
-    }
-
     template<typename T>
     struct dual {
         T x;
@@ -222,6 +201,30 @@ namespace pan::bases
     template<typename T>
     constexpr dual<T> operator / (const dual<T> &lhs, const dual<T> &rhs) {
         return {lhs.x/rhs.x, (lhs.dx*rhs.x - lhs.x*rhs.dx)/(rhs.x*rhs.x)};
-    }        
+    }
+
+    template<typename T>
+    constexpr epsilon<T> sin(const epsilon<T> &x) {
+        return x;
+    }
+
+    template<typename T>
+    constexpr epsilon<T> cos(const epsilon<T> &x) {
+        return {0};
+    }
+
+    template<typename T>
+    constexpr dual<T> sin(const dual<T> &x) {
+        using std::sin;
+        using std::cos;
+        return {sin(x.x), cos(x.x)*x.dx};
+    }
+
+    template<typename T>
+    constexpr dual<T> cos(const dual<T> &x) {
+        using std::sin;
+        using std::cos;
+        return {cos(x.x), -sin(x.x)*x.dx};
+    }
+
 }
-#endif
