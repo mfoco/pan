@@ -2,6 +2,7 @@
 #include <catch2/catch.hpp>
 
 #include <pan/bases/imaginary.hpp>
+#include <pan/bases/imaginary_complex.hpp>
 
 #include <utility>
 
