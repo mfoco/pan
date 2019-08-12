@@ -4,8 +4,6 @@
 #include <pan/expr/expr.hpp>
 #include <pan/expr/expr_printer.hpp>
 
-#include <array>
-
 using namespace std;
 using namespace pan::expr;
 
