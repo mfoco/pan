@@ -1,1 +1,2 @@
 add_subdirectory(forward_differentiation)
+add_subdirectory(eigen_interaction)

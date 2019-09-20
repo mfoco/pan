@@ -8,5 +8,5 @@ package_add_test(forward_diff_test
 target_link_libraries(forward_diff_test PUBLIC pan)
 set_target_properties(forward_diff_test PROPERTIES
     CXX_STANDARD_REQUIRED ON
-    CXX_STANDARD 17
+    CXX_STANDARD 20
 )
