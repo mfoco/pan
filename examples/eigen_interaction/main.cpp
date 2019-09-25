@@ -36,36 +36,36 @@ int main() {
 	auto f = [](auto x, auto y) { return x*y; };
 	auto r = df(f, a, b);
 
-	std::cout << get<0>(r)(0, 0)(0, 0) << " ";
-	std::cout << get<0>(r)(0, 0)(0, 1) << " ";
-	std::cout << get<0>(r)(0, 0)(1, 0) << " ";
-	std::cout << get<0>(r)(0, 0)(1, 1) << " ";
-	std::cout << get<0>(r)(0, 1)(0, 0) << " ";
-	std::cout << get<0>(r)(0, 1)(0, 1) << " ";
-	std::cout << get<0>(r)(0, 1)(1, 0) << " ";
-	std::cout << get<0>(r)(0, 1)(1, 1) << " ";
-	std::cout << get<0>(r)(1, 0)(0, 0) << " ";
-	std::cout << get<0>(r)(1, 0)(0, 1) << " ";
-	std::cout << get<0>(r)(1, 0)(1, 0) << " ";
-	std::cout << get<0>(r)(1, 0)(1, 1) << " ";
-	std::cout << get<0>(r)(1, 1)(0, 0) << " ";
-	std::cout << get<0>(r)(1, 1)(0, 1) << " ";
-	std::cout << get<0>(r)(1, 1)(1, 0) << " ";
-	std::cout << get<0>(r)(1, 1)(1, 1) << std::endl;
-	std::cout << get<1>(r)(0, 0)(0, 0) << " ";
-	std::cout << get<1>(r)(0, 0)(0, 1) << " ";
-	std::cout << get<1>(r)(0, 0)(1, 0) << " ";
-	std::cout << get<1>(r)(0, 0)(1, 1) << " ";
-	std::cout << get<1>(r)(0, 1)(0, 0) << " ";
-	std::cout << get<1>(r)(0, 1)(0, 1) << " ";
-	std::cout << get<1>(r)(0, 1)(1, 0) << " ";
-	std::cout << get<1>(r)(0, 1)(1, 1) << " ";
-	std::cout << get<1>(r)(1, 0)(0, 0) << " ";
-	std::cout << get<1>(r)(1, 0)(0, 1) << " ";
-	std::cout << get<1>(r)(1, 0)(1, 0) << " ";
-	std::cout << get<1>(r)(1, 0)(1, 1) << " ";
-	std::cout << get<1>(r)(1, 1)(0, 0) << " ";
-	std::cout << get<1>(r)(1, 1)(0, 1) << " ";
-	std::cout << get<1>(r)(1, 1)(1, 0) << " ";
-	std::cout << get<1>(r)(1, 1)(1, 1) << std::endl;
+	std::cout << 
+		get<0>(r)(0, 0)(0, 0) << "\t" << get<0>(r)(0, 0)(0, 1) << std::endl <<
+		get<0>(r)(0, 0)(1, 0) << "\t" << get<0>(r)(0, 0)(1, 1) << std::endl << 
+		std::endl;
+	std::cout << 
+		get<0>(r)(0, 1)(0, 0) << "\t" << get<0>(r)(0, 1)(0, 1) << std::endl <<
+		get<0>(r)(0, 1)(1, 0) << "\t" << get<0>(r)(0, 1)(1, 1) << std::endl << 
+		std::endl;
+	std::cout << 
+		get<0>(r)(1, 0)(0, 0) << "\t" << get<0>(r)(1, 0)(0, 1) << std::endl <<
+		get<0>(r)(1, 0)(1, 0) << "\t" << get<0>(r)(1, 0)(1, 1) << std::endl << 
+		std::endl;
+	std::cout << 
+		get<0>(r)(1, 1)(0, 0) << "\t" << get<0>(r)(1, 1)(0, 1) << std::endl <<
+		get<0>(r)(1, 1)(1, 0) << "\t" << get<0>(r)(1, 1)(1, 1) << std::endl << 
+		std::endl;
+	std::cout << 
+		get<1>(r)(0, 0)(0, 0) << "\t" << get<1>(r)(0, 0)(0, 1) << std::endl <<
+		get<1>(r)(0, 0)(1, 0) << "\t" << get<1>(r)(0, 0)(1, 1) << std::endl << 
+		std::endl;
+	std::cout << 
+		get<1>(r)(0, 1)(0, 0) << "\t" << get<1>(r)(0, 1)(0, 1) << std::endl <<
+		get<1>(r)(0, 1)(1, 0) << "\t" << get<1>(r)(0, 1)(1, 1) << std::endl << 
+		std::endl;
+	std::cout << 
+		get<1>(r)(1, 0)(0, 0) << "\t" << get<1>(r)(1, 0)(0, 1) << std::endl <<
+		get<1>(r)(1, 0)(1, 0) << "\t" << get<1>(r)(1, 0)(1, 1) << std::endl << 
+		std::endl;
+	std::cout << 
+		get<1>(r)(1, 1)(0, 0) << "\t" << get<1>(r)(1, 1)(0, 1) << std::endl <<
+		get<1>(r)(1, 1)(1, 0) << "\t" << get<1>(r)(1, 1)(1, 1) << std::endl << 
+		std::endl;
 }

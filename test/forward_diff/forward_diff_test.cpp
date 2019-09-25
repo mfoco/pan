@@ -3,6 +3,8 @@
 
 #include <pan/bases/dual.hpp>
 
+#include <pan/forward_diff/forward_diff.hpp>
+
 #include <array>
 
 using namespace std;
@@ -13,35 +15,37 @@ TEST_CASE("ForwardDifferentiation")
 	SECTION("TwoValues")
 	{
 		auto f = [](auto x, auto y) { return x*x+y*x+y*y; };
-		auto dfdx = [&f](auto x, auto y) { 
-			using T = std::decay_t<decltype(x)>;
-			return f(dual<T>{x, T(1)}, y).dx.value();
-		};
-		auto dfdy = [&f](auto x, auto y) { 
-			using T = std::decay_t<decltype(y)>;
-			return f(x, dual<T>{y, T(1)}).dx.value();
-		};
 
+		auto diff_f_0_0 = pan::forward_diff::fdf(f, 0.0, 0.0);
+		auto diff_f_1_0 = pan::forward_diff::fdf(f, 1.0, 0.0);
+		auto diff_f_3_0 = pan::forward_diff::fdf(f, 3.0, 0.0);
+		auto diff_f_0_2 = pan::forward_diff::fdf(f, 0.0, 2.0);
+		auto diff_f_1_2 = pan::forward_diff::fdf(f, 1.0, 2.0);
+		auto diff_f_3_2 = pan::forward_diff::fdf(f, 3.0, 2.0);
 
-		REQUIRE(f(0.0, 0.0) == 0.0);
-		REQUIRE(f(1.0, 0.0) == 1.0);
-		REQUIRE(f(3.0, 0.0) == 9.0);
-		REQUIRE(f(0.0, 2.0) == 4.0);
-		REQUIRE(f(1.0, 2.0) == 7.0);
-		REQUIRE(f(3.0, 2.0) == 19.0);
+		REQUIRE(get<0>(diff_f_0_0) == 0.0);
+		REQUIRE(get<0>(diff_f_1_0) == 1.0);
+		REQUIRE(get<0>(diff_f_3_0) == 9.0);
+		REQUIRE(get<0>(diff_f_0_2) == 4.0);
+		REQUIRE(get<0>(diff_f_1_2) == 7.0);
+		REQUIRE(get<0>(diff_f_3_2) == 19.0);
 
-		REQUIRE(dfdx(0.0, 0.0) == 0.0);
-		REQUIRE(dfdx(1.0, 0.0) == 2.0);
-		REQUIRE(dfdx(3.0, 0.0) == 6.0);
-		REQUIRE(dfdx(0.0, 2.0) == 2.0);
-		REQUIRE(dfdx(1.0, 2.0) == 4.0);
-		REQUIRE(dfdx(3.0, 2.0) == 8.0);
+		REQUIRE(get<1>(diff_f_0_0) == 0.0);
+		REQUIRE(get<1>(diff_f_1_0) == 2.0);
+		REQUIRE(get<1>(diff_f_3_0) == 6.0);
+		REQUIRE(get<1>(diff_f_0_2) == 2.0);
+		REQUIRE(get<1>(diff_f_1_2) == 4.0);
+		REQUIRE(get<1>(diff_f_3_2) == 8.0);
 
-		REQUIRE(dfdy(0.0, 0.0) == 0.0);
-		REQUIRE(dfdy(1.0, 0.0) == 1.0);
-		REQUIRE(dfdy(3.0, 0.0) == 3.0);
-		REQUIRE(dfdy(0.0, 2.0) == 4.0);
-		REQUIRE(dfdy(1.0, 2.0) == 5.0);
-		REQUIRE(dfdy(3.0, 2.0) == 7.0);
+		REQUIRE(get<2>(diff_f_0_0) == 0.0);
+		REQUIRE(get<2>(diff_f_1_0) == 1.0);
+		REQUIRE(get<2>(diff_f_3_0) == 3.0);
+		REQUIRE(get<2>(diff_f_0_2) == 4.0);
+		REQUIRE(get<2>(diff_f_1_2) == 5.0);
+		REQUIRE(get<2>(diff_f_3_2) == 7.0);
+
+		// REQUIRE(dfdx2(0.0, 0.0) == 2.0);
+		// REQUIRE(dfdxdy(1.0, 0.0) == 1.0);
+		// REQUIRE(dfdy2(0.0, 1.0) == 2.0);
 	}
 }

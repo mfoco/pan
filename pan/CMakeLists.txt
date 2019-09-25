@@ -10,9 +10,6 @@ set(header_files
     ${CMAKE_CURRENT_SOURCE_DIR}/include/pan/expr/expr_printer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/pan/expr/expr.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/pan/expr/opt.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/pan/integer/integer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/pan/integer/range.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/pan/integer/tag.hpp
 )
 
 add_library(pan INTERFACE)
