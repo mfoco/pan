@@ -1,13 +1,12 @@
 
 #include <type_traits>
 #include <matplotlibcpp.h>
-#include <pan/forward_diff/forward_diff.hpp>
 
-using namespace pan::forward_diff;
+#include "df.hpp"
+
 using namespace std;
 
 int main() {
-	auto f = [](auto x, auto y) { return (x + y) * sin(x * x / 10.0) * cos(y * y / 10.0) + x * x + y * x + y * y; };
 	std::vector<std::vector<double>> x, y, z1, z2, z3;
 	for (double i = -5; i <= 5; i += 0.25) {
 		std::vector<double> x_row, y_row, z1_row, z2_row, z3_row;
@@ -15,7 +14,7 @@ int main() {
 			x_row.push_back(i);
 			y_row.push_back(j);
 
-			auto [value, dfdx, dfdy] = fdf(f, i, j);
+			auto [value, dfdx, dfdy] = func_diff(i, j);
 
 			z1_row.push_back(value);
 			z2_row.push_back(dfdx);
