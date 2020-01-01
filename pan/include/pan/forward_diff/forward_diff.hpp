@@ -4,6 +4,7 @@
 #include <utility>
 #include <type_traits>
 #include <pan/bases/dual.hpp>
+#include <pan/bases/dual_math.hpp>
 
 namespace pan::forward_diff 
 {
