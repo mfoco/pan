@@ -147,6 +147,16 @@ TEMPLATE_TEST_CASE("Epsilon", "[template]", int, float, double, long double)
 		REQUIRE(x1 / x2 == xResult1);
 		REQUIRE(x2 / x1 == xResult2);
 	}
+
+	SECTION("Interaction") 
+	{
+		epsilon<TestType, 0> x1{50};
+		epsilon<TestType, 1> x2{25};
+		const epsilon<TestType, 43> xResult{0};
+
+		REQUIRE(x1 * x2 == xResult);
+		REQUIRE(x2 * x1 == xResult);
+	}
 }
 
 TEST_CASE("Epsilon")

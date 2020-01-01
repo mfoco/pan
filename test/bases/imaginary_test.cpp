@@ -147,6 +147,17 @@ TEMPLATE_TEST_CASE("Imaginary", "[template]", int, float, double, long double)
 		REQUIRE(x1 / x2 == xResult1);
 		REQUIRE(x2 / x1 == xResult2);
 	}
+
+	SECTION("Interaction") 
+	{
+		imaginary<TestType> x1{50};
+		jmaginary<TestType> x2{25};
+		const kmaginary<TestType> xResult1{1250};
+		const kmaginary<TestType> xResult2{-1250};
+
+		REQUIRE(x1 * x2 == xResult1);
+		REQUIRE(x2 * x1 == xResult2);
+	}
 }
 
 TEST_CASE("Imaginary")
