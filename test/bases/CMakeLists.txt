@@ -7,6 +7,7 @@ package_add_test(bases_test
     imaginary_test.cpp
     imaginary_real_test.cpp
     imaginary_complex_test.cpp
+    epsilon_test.cpp
 )
 target_link_libraries(bases_test PUBLIC pan)
 set_target_properties(bases_test PROPERTIES
