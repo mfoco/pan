@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include <tuple>
 #include <cstddef>
 #include <utility>
@@ -60,8 +62,9 @@ namespace pan::forward_diff
     }
 
     template <typename F, typename... TPACK>
-    constexpr auto fdf(F f, TPACK ...v) 
+    constexpr auto fdf(F &&f, TPACK ...v) 
     {
-        return std::tuple_cat(std::make_tuple(f(v...)), df(f, v...));
+        auto r = f(v...);
+        return std::tuple_cat(std::make_tuple(r), df(std::forward<F>(f), v...));
     } 
 }
